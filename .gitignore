@@ -133,3 +133,4 @@ dmypy.json
 **/*.log
 
 # End of https://www.gitignore.io/api/python
+/simulated_app_root_logs_userdata/
