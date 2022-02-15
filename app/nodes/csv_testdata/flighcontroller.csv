@@ -1,0 +1,3 @@
+"clock_tick","input.start_flying","input.height","input.course","input.speed","input.heading","input.rth","input.height_low_limit","input.start_sim","output.dummy","output.log","log","flighcontroller"
+0,False,0,0,0,0,False,1.0,"",1,"","",""
+1,False,0,0,0,0,False,1.0,"",1,"","",""
