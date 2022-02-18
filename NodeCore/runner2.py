@@ -38,7 +38,14 @@ class _NodeRunner():
         return str(node_module.create_node.__doc__)
 
     def filter_dict(self, d:dict, startswith:str='_') -> dict:
-        return dict(filter(lambda elem: not elem[0].startswith(startswith), d.items()))
+        filtered1 =  dict(filter(lambda elem: not elem[0].startswith(startswith), d.items()))
+        e = {}
+        for k,v in filtered1.items():
+            try: e.update({k: v.get()})
+            except: e.update({k: v})
+        return e
+
+
 
 
     def start_node(self, nodepath: str, user_input: dict):

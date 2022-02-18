@@ -621,6 +621,8 @@ class View:
         fields_container.css_background_color = 'transparent'
         fields_container.css_align_content = 'center'
         for field_name, value in gui_items.items():
+            try:value=value.get()
+            except: pass
             if field_name.startswith('_'):continue
             self.create_field(field_map, field_name, fields_container, value, self.save_change_field_from_gui, meta_type=self.get_meta_data(field_name, gui_items))
         return fields_container
