@@ -87,16 +87,22 @@ class Csv:
                 #self.plugin.__setattr__(in_name, self.str_to_nbr(value))
                 if value=='': continue
                 if str(value).startswith('.'):
-                    exec(f'self.plugin.{in_name}{value}')
+                    exec(f'self.plugin.{in_name}{value}') #Event
                 else:
-                    exec(f'self.plugin.{in_name}={value}')
+                    try:
+                        exec(f'self.plugin.{in_name}.set({value})')
+                    except:
+                        exec(f'self.plugin.{in_name}={value}')
 
     def _compare_output_with_dict(self, row: {}) -> dict:
         out_name: str
         diff = {}
         for out_name, expected  in row.items():
             if out_name.startswith('output.'):
-                real = eval(f'self.plugin.{out_name}')
+                try:
+                    real = eval(f'self.plugin.{out_name}.get()')
+                except:
+                    real = eval(f'self.plugin.{out_name}')
                 if isinstance(real, InOutClass): real = str(real)
                 try:
                     if eval(str(expected)) != eval(str(real)):
@@ -120,9 +126,16 @@ class Csv:
             self.d = {}
             self.d.update({'clock_tick': clock_tick})
             for in_var in self.in_vars:
-                self.d.update({in_var: type_to_string(eval(f'self.plugin.{in_var}'))})
+                try:
+                    self.d.update({in_var: type_to_string(eval(f'self.plugin.{in_var}.get()'))}) #Class type
+                except:
+                    self.d.update({in_var: type_to_string(eval(f'self.plugin.{in_var}'))}) # Built in type
             for out_var in self.out_vars:
-                self.d.update({out_var: eval(f'self.plugin.{out_var}')})
+                try:
+                    self.d.update({out_var: eval(f'self.plugin.{out_var}.get()')})
+                except:
+                    self.d.update({out_var: eval(f'self.plugin.{out_var}')})
+
             #d.update({'log': "qwerty"})
             self.out_writer.writerow(self.d)
 
