@@ -52,11 +52,10 @@ def filter_private(l, startswith='_'):
 
 class Csv:
     def __init__(self, plugin:Node, in_file: Path, out_dir: Path):
-        print(f"CSV1:{out_dir.as_posix()}")
+        print(f"Input:{out_dir.as_posix()}")
         out_dir.mkdir(parents=True, exist_ok=True)
-        print("CSV2")
         out_file = Path(out_dir.joinpath(f'{plugin.plugin_name}.csv'))
-        log.info(f'Output log:{out_file.as_posix()}')
+        print(f'Output:{out_file.as_posix()}')
         out_file.touch()
         self.out_file = None
         self.in_file = None
