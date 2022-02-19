@@ -3,6 +3,8 @@ import logging
 import os
 import time
 import typing
+from dataclasses import dataclass
+from enum import Enum
 from typing import Dict, Callable
 import remi
 from remi import GenericDialog
@@ -480,6 +482,17 @@ class TextInputReadonly(remi.gui.TextInput):
         super(TextInputReadonly, self).set_text(self.buffer)
 
 
+@dataclass
+class SelectEnum:
+    value: int = 0
+    enum: Enum = None
+    def get_ui(self):
+        return MavicMaxGui.Selectbox(choice_dict={i.name: i.value for i in self.enum})
+    def get(self):
+        return self.value
+    def set(self, value):
+        self.value = value
+
 
 class Slider(remi.gui.Slider):
     def __init__(self, *args, **kwargs):
@@ -501,6 +514,22 @@ class SelectTextbox(remi.gui.DropDown):
         return str(self.get_value())
     def set_text(self, text):
         super(SelectTextbox, self).set_value(text)
+
+
+@dataclass
+class FloatMaxMinStep:
+    value: float = 0.0
+    min: float = 0.0
+    max: float = 10.0
+    step: float = 0.1
+
+    def get_ui(self):
+        return MavicMaxGui.Slider(default_value=0.0, min=self.min, max=self.max, step=self.step)
+    def get(self):
+        return self.value
+    def set(self, value):
+        self.value = value
+
 
 class Selectbox(remi.gui.DropDown):
     def __init__(self, choice_dict:dict, *args, **kwargs):

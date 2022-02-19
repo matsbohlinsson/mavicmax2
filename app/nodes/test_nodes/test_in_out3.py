@@ -17,44 +17,27 @@ def create_node(plugin_name=plugin_name(__file__), parent=None):
     return FlightController(plugin_name=plugin_name, parent=parent)
 
 
-@dataclass
-class FloatMaxMinStep:
-    value: float = 0.0
-    min: float = 0.0
-    max: float = 10.0
-    step: float = 0.1
-
-    def get_ui(self):
-        return MavicMaxGui.Slider(default_value=0.0, min=self.min, max=self.max, step=self.step)
-    def get(self):
-        return self.value
-    def set(self, value):
-        self.value = value
 
 class MySelect(Enum):
     ONE=1
     TWO = 2
     THREE = 3
 
-@dataclass
-class IntEnum:
-    value: int = 0
-    step: float = 0.1
 
-    def get_ui(self):
-        return MavicMaxGui.Selectbox(choice_dict={i.name: i.value for i in MySelect})
-    def get(self):
-        return self.value
-    def set(self, value):
-        self.value = value
+class MySelect2(Enum):
+    ONE=1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+
 
 
 @dataclass
 class Input:
-
     select: int = 1
-    myfloat: FloatMaxMinStep = FloatMaxMinStep(0.0, 0.0, 10.0, 0.1)
-    myIntEnum: FloatMaxMinStep = IntEnum(0, 0)
+    myfloat: MavicMaxGui.FloatMaxMinStep = MavicMaxGui.FloatMaxMinStep(0.0, 0.0, 10.0, 0.1)
+    myIntEnum: MavicMaxGui.SelectEnum = MavicMaxGui.SelectEnum(0, MySelect2)
     _speed_x: MavicMaxGui.Slider = MavicMaxGui.Slider(default_value=0, min=0, max=10, step=0.1)
     _select: MavicMaxGui.SelectTextbox = MavicMaxGui.Selectbox(choice_dict={i.name: i.value for i in MySelect})
 
