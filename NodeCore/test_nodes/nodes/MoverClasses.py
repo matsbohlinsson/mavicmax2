@@ -32,7 +32,7 @@ class Output:
 
 def main_loop(input: Input, output: Output, log: logging.Logger) -> None:
     output.my_int.set(input.my_int2.get()+11)
-    #log.info("NuDu")
+
 
 def feedback_loop(input: Input, output: Output, log: logging.Logger) -> None:
     input.my_int2.set(output.my_int.get()+1)

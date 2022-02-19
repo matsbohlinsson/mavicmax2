@@ -41,6 +41,7 @@ class Container_of_plugins(Node):
         self.output.speed = self.mover.output.speed
         self.output.height = self.mover.output.height
 
+        if self.input.speed==2.0: self.log_buffer.write("speed_2")
 
 
 if __name__ == "__main__":

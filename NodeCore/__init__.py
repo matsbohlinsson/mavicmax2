@@ -240,15 +240,9 @@ class Node(ABC):
         self.timeout = 0.05
         self.run_in_threads = False
         self.log_buffer = StringIO()
-        handler = logging.StreamHandler(self.log_buffer)
-        handler.setFormatter(logging.Formatter('Line:%(lineno)s-%(message)s'))
-        self.log.addHandler(handler)
-        '''
-        logging.basicConfig(filename=LOGDIR.name+'loggerQQ.log', level=logging.INFO,
-                        format='%(asctime)s,%(msecs)d %(levelname)-5s P:%(name)s  %(message)s [%(funcName)s() %(filename)s:%(lineno)d]',
-                        datefmt='%Y-%m-%d:%H:%M:%S',
-                        force=True)
-        '''
+        #handler = logging.StreamHandler(self.log_buffer)
+        #handler.setFormatter(logging.Formatter('Line:%(lineno)s-%(message)s'))
+        #self.log.addHandler(handler)
         #node_created_callback(self.node_name_path)
 
     def __del__(self):
