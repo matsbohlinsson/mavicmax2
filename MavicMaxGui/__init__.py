@@ -485,7 +485,7 @@ class TextInputReadonly(remi.gui.TextInput):
 @dataclass
 class SelectEnum:
     value: int = 0
-    enum: Enum = None
+    enum: typing.Type = None
     def get_ui(self):
         return MavicMaxGui.Selectbox(choice_dict={i.name: i.value for i in self.enum})
     def get(self):
