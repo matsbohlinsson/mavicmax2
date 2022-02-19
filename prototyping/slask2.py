@@ -39,11 +39,45 @@ print("WW", 3<<2)
 
 print("", 0b00011 | 0b00011)
 
+class B:
+    def __init__(self, value):
+        self.value=value
+        pass
 
-print("HEJ")
+    def get(self):
+        return self.value
+    def set(self, value):
+        self.value=value
+
+
 class A:
-    pass
+    def __init__(self):
+        self.aa = B(17)
+        self.bb = B(73)
+        self.cc = 12
+        pass
 
+    def __setattr__(self, key, value):
+        print("__setattr__", key, value)
+        try:
+            getattr(self, key).set(value)
+            pass
+        except:
+            super.__setattr__(self, key, value)
+
+'''    def __getattr__(self, item):
+        print("__getattr__", item)
+        try:
+            return super.__getattr__(item).get()
+        except:
+            return super.__getattr__(item)
+'''
+print("START")
 a=A()
+print(a.aa.value)
+print("W", a.aa, a.aa.get())
+a.aa = 117
+a.cc = 1177
+print("WWW", a.aa)
 
-print("W", type(a), isinstance(a,A))
+
