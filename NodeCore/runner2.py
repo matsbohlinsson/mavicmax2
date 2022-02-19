@@ -19,7 +19,7 @@ message_field_name: str = 'message_screen'
 @dataclasses.dataclass
 class _NodeRunner():
     node_list: [Node] = dataclasses.field(default_factory=list)
-    loop_delay_ms: int = 100
+    loop_delay_ms: int = 1000
     loop_nbr:int  = 0
     running:bool = False
 
@@ -47,6 +47,13 @@ class _NodeRunner():
 
 
 
+    def fix_gui_elements(self, in_dict):
+        d={}
+        for k,v in in_dict.items():
+            d.update({k:v})
+            try: d.update({'_'+k:v.get_ui()})
+            except: pass
+        return d
 
     def start_node(self, nodepath: str, user_input: dict):
         node_module = self.import_node(nodepath)
@@ -59,6 +66,7 @@ class _NodeRunner():
 
         if message_field_name in output_dict:
             del output_dict[message_field_name]
+        input_dict = self.fix_gui_elements(input_dict)
         view = MavicMaxGui.View(gui_items_input=input_dict, gui_items_output=output_dict)
         MavicMaxGui.MyApp.show_view(view)
         self.node_list.append((node, nodepath, view))

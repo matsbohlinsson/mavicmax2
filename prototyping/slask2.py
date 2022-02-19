@@ -38,3 +38,12 @@ print(round(12.346,2))
 print("WW", 3<<2)
 
 print("", 0b00011 | 0b00011)
+
+
+print("HEJ")
+class A:
+    pass
+
+a=A()
+
+print("W", type(a), isinstance(a,A))

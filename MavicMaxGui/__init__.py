@@ -516,6 +516,7 @@ class Selectbox(remi.gui.DropDown):
             self.empty()
             for text, key in text.items():
                 self.append(text, key)
+        if super(Selectbox, self).get_key()==text: return
         super(Selectbox, self).set_value(text)
 
 
@@ -569,7 +570,7 @@ class Field():
             pass
         if type(self.input)==remi.gui.TextInput:
             self.input.set_text(str(value))
-        elif type(self.input)==SelectTextbox:
+        elif type(self.input)==MavicMaxGui.Selectbox:
             self.input.set_text(value)
         else:
             self.input.set_text(value)
@@ -634,6 +635,7 @@ class View:
     def create_field(self, field_map, field_name, fields_container, value,on_change_callback=None, meta_type=None):
         log.info(f'{field_name=}')
         if field_name in field_map: return # Already exist, dont create another one
+        print(f"TTTT {field_name} {value=}")
         w = Field(text=field_name, value=value, type_=type(value),on_change_callback=on_change_callback, meta_type=meta_type)
         widget = w.get_gui_widget()
         fields_container.append(widget)
@@ -670,6 +672,7 @@ class View:
         for field_name, value in diff.items():
             field = self.input_fields[field_name]
             try:
+                print(f"WWWWWW {field=} {value=}", )
                 field.set_value(value)
             except:
                 log.exception('Todo wrong type when dict selectbox')
@@ -691,6 +694,7 @@ class View:
 
     def get_changed_fields(self) -> typing.Dict[str, str]:
         input_field_values_dict = {}
+        print(f'Q {self.changed_fields_from_gui=}')
         for field_name in self.changed_fields_from_gui:
             field = self.input_fields[field_name]
             value = "valueerror"
@@ -702,6 +706,7 @@ class View:
                 #value = field.type(field.get_value())
             input_field_values_dict.update({field_name: value})
         self.changed_fields_from_gui={}
+        print(f'QQ {input_field_values_dict=}')
         return input_field_values_dict
 
 
