@@ -3,6 +3,8 @@
 
 '''
 TODO
+Fixa alla tester
+Fixa så man kan köra ett test lokatlt
 Settingsfile som fixar alla dependencies, switch beroende på drönare eller desktop
 
 

@@ -174,7 +174,7 @@ class Csv:
         pass
 
     def create_validation_data_file(self) -> None:
-        for clock_tick in range(0,100):
+        for clock_tick in range(0,10):
             log.info(f'\rclock_tick:{clock_tick}', end='')
             Node.clock_tick = clock_tick
             self.plugin.execute_node()
@@ -342,7 +342,6 @@ def test_node_with_csv(module_name: str, csv_dir_path: Path):
     except FileNotFoundError:
         log.info(f"Generating new file")
         dut.csv.create_validation_data_file()
-
         diff={'input file not found. Generated new in': f'{dut.csv.out_file.as_posix()}'}
         return diff
     diff = dut.csv.run_test_with_validation_data(validation_data)
@@ -360,21 +359,24 @@ def get_all_nodes_in_dir(dir_path: Path) -> [Path]:
             list_of_nodes.append(relative_path_to_import.as_posix().replace('/','.').replace('.py', ''))
     return list_of_nodes
 
-def test_nodes_in_dir(modules_dir: Path, csv_dir_path: Path):
+def test_nodes_in_dir(modules_dir: Path, csv_dir_path: Path, exclude:[str]):
     diff_all = {}
     list_of_nodes = get_all_nodes_in_dir(Path(modules_dir))
     if len(list_of_nodes)==0: diff_all.update({'no nodes tested': modules_dir})
     for node_name in list_of_nodes:
         print(f"Test node:{node_name} with data in {csv_dir_path}")
+        if node_name in exclude:
+            print("Excluded from test")
+            continue
         diff = test_node_with_csv(node_name, csv_dir_path=csv_dir_path)
         if diff:
             diff_all.update({node_name: diff})
     return diff_all
 
-def run_self_test(modules_dir: Path=Path('./nodes'), csv_dir_path:Path=Path('./csv_testdata'),  repeat: int=2):
+def run_self_test(modules_dir: Path=Path('./nodes'), csv_dir_path:Path=Path('./csv_testdata'),  repeat: int=2, exclude:[str]=[]):
     shutil.rmtree(config.test_settings.csv_dir_test, ignore_errors=True)
     for repeating in range(repeat):
-        diff = test_nodes_in_dir(modules_dir=modules_dir, csv_dir_path=csv_dir_path)
+        diff = test_nodes_in_dir(modules_dir=modules_dir, csv_dir_path=csv_dir_path, exclude=exclude)
         if diff:
             pprint(diff)
             log.info("WARNING: ERROR detected")
