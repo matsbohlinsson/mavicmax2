@@ -51,7 +51,6 @@ class IntEnum:
 
 @dataclass
 class Input:
-
     speed_x: float = 1.0
     speed_y: MavicMaxGui.FloatMaxMinStep = MavicMaxGui.FloatMaxMinStep(0.0, 0.0, 15.0, 0.1)
     select:  MavicMaxGui.SelectEnum = MavicMaxGui.SelectEnum(0, MySelect)
