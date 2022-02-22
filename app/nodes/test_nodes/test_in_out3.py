@@ -32,15 +32,11 @@ class MySelect2(Enum):
     FIVE = 5
 
 
-
 @dataclass
 class Input:
-    select: int = 1
+    select: MavicMaxGui.SelectEnum = MavicMaxGui.SelectEnum(0, MySelect)
     myfloat: MavicMaxGui.FloatMaxMinStep = MavicMaxGui.FloatMaxMinStep(0.0, 0.0, 10.0, 0.1)
     myIntEnum: MavicMaxGui.SelectEnum = MavicMaxGui.SelectEnum(0, MySelect2)
-    _speed_x: MavicMaxGui.Slider = MavicMaxGui.Slider(default_value=0, min=0, max=10, step=0.1)
-    _select: MavicMaxGui.SelectTextbox = MavicMaxGui.Selectbox(choice_dict={i.name: i.value for i in MySelect})
-
 
 
 @dataclass

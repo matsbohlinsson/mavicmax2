@@ -26,7 +26,7 @@ except:
 log = logging.getLogger(__name__)
 
 
-from sse_starlette.sse import EventSourceResponse
+#from sse_starlette.sse import EventSourceResponse
 fastapi_app = FastAPI(title='MavicMax', version='1.0')
 def startup_fastapi():
     uvicorn.run("app.startup.main:fastapi_app",host='0.0.0.0', port=4557)
@@ -63,9 +63,7 @@ def read_item(item_id: int, q: Optional[str] = None):
 def startup_remi(android_activity):
     try:
         print(f"startup_test_dji_remove_me:{android_activity}")
-        print("WWWWW")
         app.gui.run(port=8079)
-        print("QQQQQ")
         time.sleep(0.1)
 
         DroneSdk.get_drone_sdk().Ui.update_url_touch("http://127.0.0.1:8079")

@@ -701,7 +701,6 @@ class View:
         for field_name, value in diff.items():
             field = self.input_fields[field_name]
             try:
-                print(f"WWWWWW {field=} {value=}", )
                 field.set_value(value)
             except:
                 log.exception('Todo wrong type when dict selectbox')
