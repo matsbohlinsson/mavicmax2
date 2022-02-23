@@ -5,8 +5,6 @@ import MavicMaxGui
 import NodeCore
 from NodeCore import Node, Event, plugin_name
 from NodeCore.test_nodes.nodes import Mover, Generator, Smoother
-import DroneSdk
-Sdk=DroneSdk.get_drone_sdk()
 
 def create_node(plugin_name=plugin_name(__file__), parent=None):
     '''

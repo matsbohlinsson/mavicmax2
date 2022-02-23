@@ -1,36 +1,13 @@
-try:
-    from java import dynamic_proxy, jboolean, jvoid, Override, static_proxy
-    from android.app import AlertDialog
-    from android.content import Context, DialogInterface
-    from dji.sdk.products import Aircraft
-    from dji.keysdk import FlightControllerKey
-    from java.lang import Runnable
-    from android.widget import Toast
-    from com.plainembedded.mavicmax.drone import DjiValuesCache
-    from com.plainembedded.mavicmax.drone import Common
-    from com.plainembedded.mavicmax.ui import CommonUI
-    from com.plainembedded.mavicmax.drone import DroneMover
-except:
-    pass
+from DroneSdk.bindings.Bindings import Bindings, Telemetry
+from simulated_app_root_logs_userdata import get_simulated_app_root
 
-from sys import platform
-try:
-    class myrunnable(dynamic_proxy(Runnable)):
-        def __init__(self, func):
-            super().__init__()
-            self.func = func
-        def run(self):
-            self.func()
-except:
-    pass
-
-class _DjiBindings:
+class _SimBindings(Bindings):
     def __init__(self, android_activity):
+        super().__init__(android_activity)
         self.android_activity = android_activity
 
-
-    def get_telemetry(self):
-        return self.android_activity.pythonToAndroid.getTelemetry()
+    def get_telemetry(self)-> Telemetry:
+        return Telemetry()
 
     def start_virtual_sticks(self):
         self.android_activity.pythonToAndroid.startVirtualStickRaw()
@@ -93,7 +70,7 @@ class _DjiBindings:
         return a
 
     def get_log_dir(self):
-        return self.android_activity.pythonToAndroid.getLogDir()
+        return get_simulated_app_root() + '/logs/20220101_0101'
 
     def update_url_touch(self, url:str):
         return self.android_activity.pythonToAndroid.update_url_touch(url)
@@ -105,4 +82,4 @@ class _DjiBindings:
         self.android_activity.pythonToAndroid.setKeyValue(keystring, value)
 
 
-DjiBindings=_DjiBindings(None)
+SimBindings=_SimBindings(None)

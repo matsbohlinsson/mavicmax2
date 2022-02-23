@@ -10,7 +10,7 @@ def run():
     exclude=['app.nodes.test_nodes.test_in_out1',
              'app.nodes.test_nodes.test_in_out2',
              'app.nodes.test_nodes.test_in_out3',
-             'app.nodes.drone.telemetry',
+             #'app.nodes.drone.telemetry',
              'app.nodes.admin.git',
              'app.nodes.admin.log',
              'app.nodes.drone.remotecontroller']

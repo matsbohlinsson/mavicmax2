@@ -7,8 +7,7 @@ from DroneSdk.dji.DjiKeys import Keys
 from NodeCore import Node, plugin_name
 import DroneSdk
 from MavicMaxGui import Select
-
-Sdk=DroneSdk.get_drone_sdk()
+from DroneSdk.Sdk import Sdk
 
 def create_node(plugin_name=plugin_name(__file__), parent=None):
     '''

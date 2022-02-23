@@ -10,7 +10,7 @@ import MavicMaxGui
 import NodeCore
 from NodeCore import Node, Event, plugin_name
 import DroneSdk
-Sdk=DroneSdk.get_drone_sdk()
+from DroneSdk.Sdk import Sdk
 
 def create_node(plugin_name=plugin_name(__file__), parent=None, autopull:bool=False):
     '''
