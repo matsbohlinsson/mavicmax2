@@ -13,12 +13,12 @@ def send_attachment(subject: str, message:str, files:[Path], app_generated_passw
     msg["Subject"] = subject
     msg["From"] = from_address  # sender address
     msg["To"] = to_address  # reciver address
-    msg.attach(MIMEText("Hello", message))
+    msg.attach(MIMEText(message, 'plain'))
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login(from_address, app_generated_password)  # login gmail account
 
         for file in files:
-            file_path = file.name
+            file_path = file.absolute()
             mimeBase = MIMEBase("application", "octet-stream")
             with open(file_path, "rb") as fileread:
                 mimeBase.set_payload(fileread.read())
@@ -30,9 +30,14 @@ def send_attachment(subject: str, message:str, files:[Path], app_generated_passw
         print("mail has sent")
 
 if __name__ == "__main__":
+    p = Path('../logs')
+    files=[i for i in p.glob('**/*.csv')]
+    print(files)
     send_attachment(subject="subject",
                     message='Läget?',
-                    files=[Path('send_email.py'), Path('openapi.json')],
+                    files=files,
                     app_generated_password = 'saxxdxfygdcxhzaq',
                     from_address="mats.bohlinsson@gmail.com",
                     to_address = "mats.bohlinsson@gmail.com")
+
+
