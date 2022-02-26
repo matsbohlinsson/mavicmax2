@@ -8,7 +8,7 @@ import smtplib
 
 
 
-def send_attachment(subject: str, message:str, files:[Path], app_generated_password='saxxdxfygdcxhzaq', from_address ="mats.bohlinsson@gmail.com", to_address= None):
+def send_email_with_attachments(subject: str, message:str, files:[Path], app_generated_password='saxxdxfygdcxhzaq', from_address ="mats.bohlinsson@gmail.com", to_address= None):
     msg = MIMEMultipart()
     msg["Subject"] = subject
     msg["From"] = from_address  # sender address
@@ -33,11 +33,11 @@ if __name__ == "__main__":
     p = Path('../logs')
     files=[i for i in p.glob('**/*.csv')]
     print(files)
-    send_attachment(subject="subject",
-                    message='Läget?',
-                    files=files,
-                    app_generated_password = 'saxxdxfygdcxhzaq',
-                    from_address="mats.bohlinsson@gmail.com",
-                    to_address = "mats.bohlinsson@gmail.com")
+    send_email_with_attachments(subject="subject",
+                                message='Läget?',
+                                files=files,
+                                app_generated_password = 'saxxdxfygdcxhzaq',
+                                from_address="mats.bohlinsson@gmail.com",
+                                to_address = "mats.bohlinsson@gmail.com")
 
 
