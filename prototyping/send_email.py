@@ -1,4 +1,5 @@
 import smtplib
+import time
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
@@ -30,14 +31,23 @@ def send_email_with_attachments(subject: str, message:str, files:[Path], app_gen
         print("mail has sent")
 
 if __name__ == "__main__":
-    p = Path('../logs')
-    files=[i for i in p.glob('**/*.csv')]
+    p = Path('./inkommande_fakturor')
+    files=[i for i in p.glob('*')]
     print(files)
-    send_email_with_attachments(subject="subject",
-                                message='Läget?',
-                                files=files,
+    skip=True
+    for i in files:
+        if i.name=='12_google.pdf':skip=False
+        if skip:
+            print(f"skipping {i.name}")
+            continue
+        send_email_with_attachments(subject="subject",
+                                message='Underlag Plain embedded',
+                                files=[i],
                                 app_generated_password = 'saxxdxfygdcxhzaq',
                                 from_address="mats.bohlinsson@gmail.com",
                                 to_address = "mats.bohlinsson@gmail.com")
+
+        print(f"Sent:{[i]}")
+        time.sleep(1)
 
 
