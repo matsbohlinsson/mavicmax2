@@ -34,7 +34,7 @@ if __name__ == "__main__":
     p = Path('./inkommande_fakturor')
     files=[i for i in p.glob('*')]
     print(files)
-    skip=True
+    skip=False
     for i in files:
         if i.name=='12_google.pdf':skip=False
         if skip:
@@ -45,7 +45,7 @@ if __name__ == "__main__":
                                 files=[i],
                                 app_generated_password = 'saxxdxfygdcxhzaq',
                                 from_address="mats.bohlinsson@gmail.com",
-                                to_address = "mats.bohlinsson@gmail.com")
+                                to_address = "inbox.lev.409045@arkivplats.seQQ")
 
         print(f"Sent:{[i]}")
         time.sleep(1)
