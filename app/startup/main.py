@@ -48,7 +48,7 @@ def startup(android_activity):
         _thread.start_new_thread(startup_remi, (android_activity,))
         _thread.start_new_thread(start_autostart, ())
         import DroneSdk.sdk
-        uvicorn.run("DroneSdk.sdk:app_fastapi", host='0.0.0.0', port=4557, workers=30)
+        uvicorn.run("DroneSdk.sdk:app_fastapi", host='0.0.0.0', port=4557, workers=5)
     except:
         print(traceback.format_exc())
 
