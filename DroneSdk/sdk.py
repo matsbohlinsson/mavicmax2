@@ -15,9 +15,10 @@ app_fastapi = FastAPI(title='MavicMax', version='1.0')
 def get_drone_telemetry() -> models.Telemetry:
     return current_sdk.get_drone_telemetry()
 
-@app_fastapi.post("/takeoff", response_model=models.Telemetry)
-def get_drone_takeoff() -> models.Telemetry:
-    return current_sdk.takeoff()
+@app_fastapi.post("/takeoff")
+def get_drone_takeoff() -> str:
+    current_sdk.takeoff()
+    return "OK"
 
 @app_fastapi.post("/get_rc_telemetry", response_model=models.Rc)
 def get_rc_telemetry() -> models.Rc:
