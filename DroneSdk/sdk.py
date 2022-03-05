@@ -49,6 +49,10 @@ def update_url_touch(url:str):
 def get_log_dir():
     return current_sdk.get_log_dir()
 
+@app.post("test")
+def fastapi_test():
+    return "test_ok"
+
 
 #import DroneSdk.sd
 
