@@ -57,7 +57,7 @@ def startup(android_activity):
         _thread.start_new_thread(startup_remi, (android_activity,))
         start_autostart()
         import DroneSdk.sdk
-        uvicorn.run("DroneSdk.sdk:app", host='0.0.0.0', port=4558, reload=True, debug=True, workers=3)
+        uvicorn.run("DroneSdk.sdk:app", host='0.0.0.0', port=4557, reload=True, debug=True, workers=3)
 
     except:
         print(traceback.format_exc())

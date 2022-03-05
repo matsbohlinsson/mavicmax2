@@ -16,13 +16,12 @@ from fastapi import FastAPI
 from app.util import platform
 
 log = logging.getLogger(__file__)
-current_sdk=DroneSdk.bindings.AndroidBindings
-'''
+current_sdk=DroneSdk.bindings.AndroidBindings.DjiBindings
+
 if platform.is_running_on_android():
     current_sdk = DroneSdk.bindings.AndroidBindings.DjiBindings
 else:
-    current_sdk = DroneSdk.bindings.PcSimulatorBindings
-'''
+    current_sdk = DroneSdk.bindings.PcSimulatorBindings.SimBindings
 
 #bindings=DroneSdk.bindings.PcSimulatorBindings
 app = FastAPI(title='MavicMax', version='1.0')
@@ -30,25 +29,25 @@ app = FastAPI(title='MavicMax', version='1.0')
 
 @app.post("get_drone_telemetry", response_model=models.Telemetry)
 def get_drone_telemetry() -> models.Telemetry:
-    return current_sdk.DjiBindings.get_telemetry()
+    return current_sdk.get_telemetry()
 
 @app.post("get_rc_telemetry", response_model=models.Rc)
 def get_rc_telemetry() -> models.Rc:
-    return current_sdk.DjiBindings.get_rc_inputs()
+    return current_sdk.get_rc_inputs()
 
 
 #@app.post("start_simulator/{lat}/{lon}")
 @app.post("start_simulator")
 def start_simulator(self, lat:float = 58.1111, lon: float=11.010203):
-    current_sdk.DjiBindings.start_simulator(lat, lon)
+    current_sdk.start_simulator(lat, lon)
 
 @app.post("update_url_touch")
 def update_url_touch(url:str):
-    current_sdk.DjiBindings.update_url_touch(url)
+    current_sdk.update_url_touch(url)
 
 @app.post("get_log_dir")
 def get_log_dir():
-    return current_sdk.DjiBindings.get_log_dir()
+    return current_sdk.get_log_dir()
 
 
 #import DroneSdk.sd
