@@ -42,7 +42,7 @@ async def get_log(filename: str='mavicmax2.log', last_lines=250, grep='', exclud
     return grep_log(logfile_abs, grep, exclude, int(last_lines))
 
 @app_fastapi.get("/restart")
-async def restart_app():
+async def restart():
     current_sdk.restart_app()
     return "Restarting"
 
