@@ -1,17 +1,9 @@
-import copy
-import time
-import traceback
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
-
-import DroneSdk
-import MavicMaxGui
 import NodeCore
 from NodeCore import Node, Event, plugin_name
 import DroneSdk
-from DroneSdk.Sdk_old import Sdk
-import DroneSdk.sdk
+import DroneSdk.sdk as sdk
 from app.util import grep_log
 
 
@@ -42,14 +34,14 @@ class Git(Node):
     def __init__(self, autopull: bool=True, *args, **kwargs) -> None:
         input, output = Input(), Output()
         super().__init__(input=input, output=output, *args, **kwargs)
-        self.input.clear.register(lambda : Sdk.Admin.restart_app())
+        self.input.clear.register(lambda : sdk.restart())
         self.input.upd_logcat.register(lambda : self.refresh('logcat.txt'))
         self.input.upd_log.register(lambda : self.refresh('mavicmax2.log'))
 
 
     def refresh(self, filename):
         DroneSdk.sdk.get_log_dir()
-        logfile_abs = Sdk.Admin.get_log_dir()+f'/{filename}'
+        logfile_abs = sdk.get_log_dir()+f'/{filename}'
         header = f"From file:{logfile_abs}\n"
         self.output.message_screen = "CLR" +  header + grep_log(logfile_abs, self.input.grep,  self.input.exclude, self.input.lines)
 

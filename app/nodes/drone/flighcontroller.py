@@ -10,7 +10,7 @@ def create_node(plugin_name=plugin_name(__file__), parent=None):
 
 @dataclass
 class Input:
-    start_flying: bool = False
+    kill_switch: int = 0
     height: float = 0
     course: float = 0
     speed: float = 0
@@ -20,6 +20,8 @@ class Input:
     height_low_limit:float = 1.0
     speed_limit = 15
     start_sim: Event = field(default_factory=Event)
+    start_motors: Event = field(default_factory=Event)
+    set_speed: Event = field(default_factory=Event)
 
 @dataclass
 class Output:
@@ -32,14 +34,14 @@ class FlightController(Node):
     def __init__(self, *args, **kwargs) -> None:
         input, output = Input(), Output()
         super().__init__(input=input, output=output, *args, **kwargs)
-        self.input.start_sim.register(lambda: sdk.start_simulator())
+        self.input.start_sim.register(sdk.start_simulator)
+        self.input.start_motors.register(sdk.start_motors)
 
     def run(self) -> None:
         try:
             i = self.input
-            if self.input.start_flying:
-                sdk.start_motors()
-                sdk.set_speed(course=i.course, speed=i.speed, height=i.height, heading=i.heading)
+            if i.kill_switch:
+                sdk.set_speed(course=i.course, speed=i.speed, height=i.height, heading=i.heading, duration=0.5)
         except:
             log.exception("flightcontroller")
 
