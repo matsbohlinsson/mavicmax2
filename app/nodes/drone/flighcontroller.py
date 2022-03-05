@@ -20,6 +20,7 @@ class Input:
     height_low_limit:float = 1.0
     speed_limit = 15
     start_sim: Event = field(default_factory=Event)
+    takeoff: Event = field(default_factory=Event)
     start_motors: Event = field(default_factory=Event)
     set_speed: Event = field(default_factory=Event)
 
@@ -36,6 +37,7 @@ class FlightController(Node):
         super().__init__(input=input, output=output, *args, **kwargs)
         self.input.start_sim.register(sdk.start_simulator)
         self.input.start_motors.register(sdk.start_motors)
+        self.input.takeoff.register(sdk.takeoff)
 
     def run(self) -> None:
         try:

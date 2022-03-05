@@ -24,7 +24,7 @@ def get_drone_telemetry() -> models.Telemetry:
     return current_sdk.get_drone_telemetry()
 
 @app_fastapi.post("/takeoff")
-def get_drone_takeoff() -> str:
+def takeoff() -> str:
     current_sdk.takeoff()
     return "OK"
 
