@@ -140,8 +140,8 @@ class _DjiBindings(Bindings):
         def rawstick_to_float(value) -> float:
             value = float(value)
             return round((value - 1024) / 660, 4)
-        rc_gps = self.android_activity.pythonToAndroid.getRemoteInputs()
-        rc_sticks = self.android_activity.pythonToAndroid.get_rc_inputs()
+        rc_gps = self.android_activity.pythonToAndroid.getRemoteGps()
+        rc_sticks = self.android_activity.pythonToAndroid.getRemoteInputs()
         return models.Rc(
         lat = rc_gps[0],
         lon = rc_gps[1],
