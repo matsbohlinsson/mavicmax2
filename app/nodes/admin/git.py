@@ -3,9 +3,6 @@ import logging
 import time
 import traceback
 from dataclasses import dataclass, field
-
-import DroneSdk
-import MavicMaxGui
 import NodeCore
 from NodeCore import Node, Event, plugin_name
 import DroneSdk.sdk as sdk

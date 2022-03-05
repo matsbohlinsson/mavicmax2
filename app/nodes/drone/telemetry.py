@@ -1,13 +1,10 @@
-import copy
 import logging
 from dataclasses import dataclass
 from datetime import datetime
 
-import MavicMaxGui
 import NodeCore
 from NodeCore import Node, Event, plugin_name
-from NodeCore.test_nodes.nodes import Mover, Generator, Smoother
-from DroneSdk.Sdk_old import Sdk
+import DroneSdk.sdk as sdk
 
 def create_node(plugin_name=plugin_name(__file__), parent=None):
     return Telemetry(plugin_name=plugin_name, parent=parent)
@@ -50,38 +47,33 @@ class Telemetry(Node):
 
     def run(self) -> None:
         try:
-            Sdk.Telemetry.update()
+            telemetry = sdk.get_drone_telemetry()
             today = datetime.now()
             self.output.time = today.strftime("%H:%M:%S.%f")[:-5]
-            self.output.speed_x = Sdk.Telemetry.speed_x
-            self.output.speed_y = Sdk.Telemetry.speed_y
-            self.output.speed_z = Sdk.Telemetry.speed_z
-            self.output.yaw = Sdk.Telemetry.yaw
-            self.output.pitch = Sdk.Telemetry.pitch
-            self.output.roll = Sdk.Telemetry.roll
-            self.output.lat = Sdk.Telemetry.lat
-            self.output.lon = Sdk.Telemetry.lon
-            self.output.height = Sdk.Telemetry.height
-            self.output.is_flying = Sdk.Telemetry.isFlying
-            self.output.gps_level = Sdk.Telemetry.gps_level
-            self.output.flight_mode = Sdk.Telemetry.flight_mode
-            self.output.drone_type = Sdk.Telemetry.drone_type
-            self.output.terrain_height = Sdk.Telemetry.terrain_height
-            self.output.rpm = Sdk.Telemetry.rpm
-            self.output.motor_on_nbr = Sdk.Telemetry.motor_on_nbr
-            self.output.flytime = Sdk.Telemetry.flytime
-            self.output.state = Sdk.Telemetry.state
-            self.output.speed_xy = Sdk.Telemetry.speed_xy
-            self.output.course = Sdk.Telemetry.course
-
-            self.output.keytest =  Sdk.Keys.get(Sdk.Keys.Key.FlightController.ATTITUDE_YAW)
-            self.output.key2test =  Sdk.Keys.get(Sdk.Keys.Key.FlightController.GO_HOME_HEIGHT_IN_METERS)
-
+            self.output.speed_x = telemetry.speed_x
+            self.output.speed_y = telemetry.speed_y
+            self.output.speed_z = telemetry.speed_z
+            self.output.yaw = telemetry.yaw
+            self.output.pitch = telemetry.pitch
+            self.output.roll = telemetry.roll
+            self.output.lat = telemetry.lat
+            self.output.lon = telemetry.lon
+            self.output.height = telemetry.height
+            self.output.is_flying = telemetry.is_flying
+            self.output.gps_level = telemetry.gps_level
+            self.output.flight_mode = telemetry.flight_mode
+            self.output.drone_type = telemetry.drone_type
+            self.output.terrain_height = telemetry.terrain_height
+            self.output.rpm = telemetry.rpm
+            self.output.motor_on_nbr = telemetry.motor_on_nbr
+            self.output.flytime = telemetry.flytime
+            self.output.state = telemetry.state
+            self.output.speed_xy = telemetry.speed_xy
+            self.output.course = telemetry.course
+            #self.output.keytest =  Sdk.Keys.get(Sdk.Keys.Key.FlightController.ATTITUDE_YAW)
+            #self.output.key2test =  Sdk.Keys.get(Sdk.Keys.Key.FlightController.GO_HOME_HEIGHT_IN_METERS)
         except:
             logging.exception('Telemetry')
-
-
-
 
 
 if __name__ == "__main__":
