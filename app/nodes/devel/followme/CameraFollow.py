@@ -3,7 +3,7 @@ import logging
 from dataclasses import dataclass, field
 from NodeCore import Event, General, plugin_name
 import app.util
-import app.nodes.drone.flighcontroller
+import app.nodes.drone.flightcontroller
 
 class CameraFollow(General):
     input: Input

@@ -43,7 +43,7 @@ class FlightController(Node):
         try:
             i = self.input
             if i.kill_switch:
-                sdk.set_speed(course=i.course, speed=i.speed, height=i.height, heading=i.heading, duration=0.1)
+                sdk.set_speed(course=i.course, speed=i.speed, height=i.height, heading=i.heading, duration=0.2)
         except:
             log.exception("flightcontroller")
 
