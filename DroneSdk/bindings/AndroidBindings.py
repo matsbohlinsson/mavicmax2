@@ -148,5 +148,4 @@ class _DjiBindings(Bindings):
     def set_key_value(self, keystring:str, value):
         self.android_activity.pythonToAndroid.setKeyValue(keystring, value)
 
-
 DjiBindings=_DjiBindings(None)
