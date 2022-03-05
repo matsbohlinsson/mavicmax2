@@ -137,8 +137,24 @@ class _DjiBindings(Bindings):
         return branch
 
     def get_rc_inputs(self):
-        a = self.android_activity.pythonToAndroid.getRemoteInputs()
-        return a
+        def rawstick_to_float(value) -> float:
+            value = float(value)
+            return round((value - 1024) / 660, 4)
+        rc_gps = self.android_activity.pythonToAndroid.getRemoteInputs()
+        rc_sticks = self.android_activity.pythonToAndroid.get_rc_inputs()
+        return models.Rc(
+        lat = rc_gps[0],
+        lon = rc_gps[1],
+        alt = rc_gps[2],
+        speed = rc_gps[3],
+        baro_alt = rc_gps[4],
+        time = rc_gps[5],
+        acc = rc_gps[6],
+        lx = rawstick_to_float(rc_sticks[0]),
+        ly = rawstick_to_float(rc_sticks[1]),
+        rx = rawstick_to_float(rc_sticks[2]),
+        ry = rawstick_to_float(rc_sticks[3])
+        )
 
     def get_rc_gps(self):
         a = self.android_activity.pythonToAndroid.getRemoteGps()
