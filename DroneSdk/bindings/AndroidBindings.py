@@ -1,4 +1,6 @@
+import _thread
 import math
+import time
 
 from DroneSdk import models
 from DroneSdk.bindings.Bindings import Bindings
@@ -91,7 +93,10 @@ class _DjiBindings(Bindings):
         self.android_activity.pythonToAndroid.startMotors()
 
     def restart_app(self):
-        self.android_activity.pythonToAndroid.restartApp()
+        def _restart_local():
+            time.sleep(0.1)
+            _thread.start_new_thread(self.android_activity.pythonToAndroid.restartApp,())
+        _restart_local()
 
 
     def takeoff(self):
