@@ -15,6 +15,10 @@ app_fastapi = FastAPI(title='MavicMax', version='1.0')
 def get_drone_telemetry() -> models.Telemetry:
     return current_sdk.get_drone_telemetry()
 
+@app_fastapi.post("/takeoff", response_model=models.Telemetry)
+def get_drone_takeoff() -> models.Telemetry:
+    return current_sdk.takeoff()
+
 @app_fastapi.post("/get_rc_telemetry", response_model=models.Rc)
 def get_rc_telemetry() -> models.Rc:
     return current_sdk.get_rc_inputs()
@@ -22,10 +26,12 @@ def get_rc_telemetry() -> models.Rc:
 @app_fastapi.post("/start_simulator")
 def start_simulator(lat:float = 58.1111, lon: float=11.010203):
     current_sdk.start_simulator(lat, lon)
+    return "OK"
 
 @app_fastapi.post("/update_url_touch")
 def update_url_touch(url:str):
     current_sdk.update_url_touch(url)
+    return "OK"
 
 @app_fastapi.post("/get_log_dir")
 def get_log_dir():
