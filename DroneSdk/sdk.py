@@ -11,6 +11,9 @@ log = logging.getLogger(__file__)
 current_sdk= android.DjiBindings if platform.is_running_on_android() else desktop.SimBindings
 app_fastapi = FastAPI(title='MavicMax', version='1.0')
 
+#########
+# Drone #
+#########
 @app_fastapi.post("/get_drone_telemetry", response_model=models.Telemetry)
 def get_drone_telemetry() -> models.Telemetry:
     return current_sdk.get_drone_telemetry()
@@ -29,6 +32,12 @@ def start_simulator(lat:float = 58.1111, lon: float=11.010203):
     current_sdk.start_simulator(lat, lon)
     return "OK"
 
+@app_fastapi.post("/set_speed")
+def set_speed(course: float = 45, speed: float = 0.5, height: float = 5.5, heading: float = 23, duration: float = 1.5):
+    current_sdk.set_speed(course, speed, height, heading, duration)
+
+#########
+#  APP  #
 @app_fastapi.post("/update_url_touch")
 def update_url_touch(url:str):
     current_sdk.update_url_touch(url)

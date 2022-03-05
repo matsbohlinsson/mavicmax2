@@ -40,6 +40,25 @@ def calc_course(x: float, y: float):
     return degrees
 
 
+class _Helpers:
+    VS_ADVANCED = 0
+    VS_BODY = 1
+    VS_YAW_SPEED = 3
+    VS_VERT_ALT = 4
+    VS_PITCH_SPEED = 6
+
+    def getVirtualstickRawFlag(self, advanced, body, yawSpeed, vertAltitude, pitchSpeed):
+        b=0
+        if (advanced!=0): b+= (1<<Helpers.VS_ADVANCED)
+        if (body!=0): b+= (1<<Helpers.VS_BODY)
+        if (yawSpeed!=0): b+= (1<<Helpers.VS_YAW_SPEED)
+        if (vertAltitude!=0): b+= (1<<Helpers.VS_VERT_ALT)
+        if (pitchSpeed!=0): b+= (1<<Helpers.VS_PITCH_SPEED)
+        return b
+Helpers = _Helpers()
+
+
+
 class _DjiBindings(Bindings):
     def __init__(self, android_activity):
         super().__init__(android_activity)
@@ -171,5 +190,17 @@ class _DjiBindings(Bindings):
 
     def set_key_value(self, keystring:str, value):
         self.android_activity.pythonToAndroid.setKeyValue(keystring, value)
+
+    def set_speed(self, course: float = None, speed: float = 0, height: float = None, heading: float = None,
+                  duration: float = 1.5):
+        flag = Helpers.getVirtualstickRawFlag(advanced=1, body=0, yawSpeed=0, vertAltitude=1, pitchSpeed=1)
+        radBearing = math.radians(course)
+        pitch = speed * math.cos(radBearing)
+        roll = speed * math.sin(radBearing)
+        yaw = heading
+        self.android_activity.pythonToAndroid.sendVirtualStickRaw(int(flag), float(height), float(roll), float(pitch),
+                                                                  float(yaw), int(duration) * 1000)
+
+
 DjiBindings=_DjiBindings(None)
 
