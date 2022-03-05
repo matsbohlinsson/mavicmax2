@@ -1,14 +1,8 @@
-import copy
 import logging
 from dataclasses import dataclass, field
-
-import DroneSdk
-#import DroneSdk.DroneSimulator as DroneSdk
-import MavicMaxGui
 import NodeCore
 from NodeCore import Node, Event, plugin_name
-from NodeCore.test_nodes.nodes import Mover, Generator, Smoother
-from DroneSdk.Sdk_old import Sdk
+import DroneSdk.sdk as sdk
 log = logging.getLogger(__file__)
 
 def create_node(plugin_name=plugin_name(__file__), parent=None):
@@ -38,18 +32,16 @@ class FlightController(Node):
     def __init__(self, *args, **kwargs) -> None:
         input, output = Input(), Output()
         super().__init__(input=input, output=output, *args, **kwargs)
-        self.input.start_sim.register(lambda: Sdk.Flightctrl.start_simulator())
-        #self.input_old = copy.deepcopy(self.input)
+        self.input.start_sim.register(lambda: sdk.start_simulator())
 
     def run(self) -> None:
         try:
             i = self.input
             if self.input.start_flying:
-                Sdk.Flightctrl.start_motors()
-                Sdk.Flightctrl.set_speed(course=i.course, speed=i.speed, height=i.height, heading=i.heading)
-
+                sdk.start_motors()
+                sdk.set_speed(course=i.course, speed=i.speed, height=i.height, heading=i.heading)
         except:
-            log.exception("telemetry")
+            log.exception("flightcontroller")
 
 if __name__ == "__main__":
     NodeCore.run_from_main(__file__)

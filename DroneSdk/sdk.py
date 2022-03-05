@@ -32,6 +32,10 @@ def get_drone_takeoff() -> str:
 def set_speed(course: float = 45, speed: float = 0.5, height: float = 5.5, heading: float = 23, duration: float = 1.5):
     current_sdk.set_speed(course, speed, height, heading, duration)
 
+@app_fastapi.post("/start_motors")
+def start_motors():
+    current_sdk.start_motors()
+
 @app_fastapi.post("/get_rc_telemetry", response_model=models.Rc)
 def get_rc_telemetry() -> models.Rc:
     return current_sdk.get_rc_inputs()
