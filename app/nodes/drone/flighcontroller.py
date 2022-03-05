@@ -8,7 +8,7 @@ import MavicMaxGui
 import NodeCore
 from NodeCore import Node, Event, plugin_name
 from NodeCore.test_nodes.nodes import Mover, Generator, Smoother
-from DroneSdk.Sdk import Sdk
+from DroneSdk.Sdk_old import Sdk
 log = logging.getLogger(__file__)
 
 def create_node(plugin_name=plugin_name(__file__), parent=None):

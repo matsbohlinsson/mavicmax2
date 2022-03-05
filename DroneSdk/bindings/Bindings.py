@@ -29,7 +29,7 @@ class Bindings(ABC):
         self.android_activity = android_activity
 
     @abstractmethod
-    def get_telemetry(self) -> Telemetry:
+    def get_drone_telemetry(self) -> Telemetry:
         pass
     @abstractmethod
     def start_virtual_sticks(self):

@@ -8,7 +8,7 @@ import DroneSdk
 import MavicMaxGui
 import NodeCore
 from NodeCore import Node, Event, plugin_name
-from DroneSdk.Sdk import Sdk
+from DroneSdk.Sdk_old import Sdk
 
 
 def create_node(plugin_name=plugin_name(__file__), parent=None, autopull:bool=False):

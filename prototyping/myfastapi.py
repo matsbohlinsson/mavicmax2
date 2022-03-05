@@ -135,8 +135,8 @@ async def create_item(item: Item, value: int):
     return_item.tax=19.9
     return return_item
 
-@app.post("/items_plain/{value}")
-async def create_item(value: int) -> int:
+@app.post("/items_plain/{value}/{enable}")
+async def create_item(value: int, enable: bool=True) -> int:
     '''
     Mydoc
     :param item:

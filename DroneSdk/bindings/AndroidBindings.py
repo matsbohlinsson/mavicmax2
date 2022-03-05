@@ -1,5 +1,6 @@
 import math
 
+from DroneSdk import models
 from DroneSdk.bindings.Bindings import Bindings
 
 try:
@@ -43,30 +44,38 @@ class _DjiBindings(Bindings):
         super().__init__(android_activity)
         self.android_activity = android_activity
 
-    def get_telemetry(self):
+    def get_drone_telemetry(self) -> models.Telemetry:
         djitelemtry =  self.android_activity.pythonToAndroid.getTelemetry()
-        self.speed_x = djitelemtry.getXSpeed() / 10.0
-        self.speed_y = djitelemtry.getYSpeed() / 10.0
-        self.speed_z = djitelemtry.getZSpeed() / 10.0
-        self.yaw = djitelemtry.getYaw() / 10.0
-        self.pitch = djitelemtry.getPitch() / 10.0
-        self.roll = djitelemtry.getRoll() / 10.0
-        self.lat = djitelemtry.getLatitude()
-        self.lon = djitelemtry.getLongitude()
-        self.height = djitelemtry.getHeight() / 10.0
-        self.isFlying = djitelemtry.groundOrSky()
+        telemtry = models.Telemetry(
+            speed_x = djitelemtry.getXSpeed() / 10.0,
+            speed_y = djitelemtry.getYSpeed() / 10.0,
+            speed_z = djitelemtry.getZSpeed() / 10.0,
+            yaw = djitelemtry.getYaw() / 10.0,
+            pitch = djitelemtry.getPitch() / 10.0,
+            roll = djitelemtry.getRoll() / 10.0,
+            lat = djitelemtry.getLatitude(),
+            lon = djitelemtry.getLongitude(),
+            height = djitelemtry.getHeight() / 10.0,
+            is_flying = djitelemtry.groundOrSky(),
+            gps_number = djitelemtry.getGpsNum(),
+            gps_level = djitelemtry.getGpsLevel(),
+            flight_mode = str(djitelemtry.getFlightAction()),
+            drone_type = str(djitelemtry.getDroneType()),
+            terrain_height = djitelemtry.getSwaveHeight() / 10.0,
+            motor_on_nbr = djitelemtry.getMotorRevolution(),
+            rpm = -11,  # telemetry.getEscAverageSpeed() dji.midware.data.model.P3.DataFlycGetPushPowerParam.getInstance().getEscAverageSpeed();
+            flytime = djitelemtry.getFlyTime(),
+            state = str(djitelemtry.getFlycState()),
+            speed_xy = round(math.sqrt(djitelemtry.speed_x ** 2 + djitelemtry.speed_y ** 2), 1),
+            course = round(calc_course(djitelemtry.speed_x, djitelemtry.speed_y), 1)
+        )
+        return telemtry
 
-        self.getGpsNum = djitelemtry.getGpsNum()
-        self.gps_level = djitelemtry.getGpsLevel()
-        self.flight_mode = str(djitelemtry.getFlightAction())
-        self.drone_type = str(djitelemtry.getDroneType())
-        self.terrain_height = djitelemtry.getSwaveHeight() / 10.0
-        self.motor_on_nbr = djitelemtry.getMotorRevolution()
-        self.rpm = -11  # self.telemetry.getEscAverageSpeed() dji.midware.data.model.P3.DataFlycGetPushPowerParam.getInstance().getEscAverageSpeed();
-        self.flytime = djitelemtry.getFlyTime()
-        self.state = str(djitelemtry.getFlycState())
-        self.speed_xy = round(math.sqrt(djitelemtry.speed_x ** 2 + djitelemtry.speed_y ** 2), 1)
-        self.course = round(calc_course(djitelemtry.speed_x, djitelemtry.speed_y), 1)
+    def start_simulator(self, lat: float,lon: float):
+        self.android_activity.pythonToAndroid.startSimulator(lat,lon)
+
+    def stop_simulator(self):
+        self.android_activity.pythonToAndroid.stop()
 
 
     def start_virtual_sticks(self):
@@ -84,8 +93,6 @@ class _DjiBindings(Bindings):
     def restart_app(self):
         self.android_activity.pythonToAndroid.restartApp()
 
-    def start_simulator(self, lat: float,lon: float):
-        self.android_activity.pythonToAndroid.startSimulator(lat,lon)
 
     def takeoff(self):
         self.android_activity.pythonToAndroid.takeoff()

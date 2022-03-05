@@ -6,7 +6,7 @@ class _SimBindings(Bindings):
         super().__init__(android_activity)
         self.android_activity = android_activity
 
-    def get_telemetry(self)-> Telemetry:
+    def get_drone_telemetry(self)-> Telemetry:
         return Telemetry()
 
     def start_virtual_sticks(self):

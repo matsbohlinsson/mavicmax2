@@ -1,12 +1,12 @@
 import dataclasses
 import logging
 import math
-import DroneSdk.AndroidBindings
-import DroneSdk.PcSimulatorBindings
+import DroneSdk.bindings.AndroidBindings
+import DroneSdk.bindings.PcSimulatorBindings
 from DroneSdk.dji import DjiKeys
 log = logging.getLogger(__file__)
 
-bindings=DroneSdk.PcSimulatorBindings.SimBindings
+bindings=DroneSdk.bindings.PcSimulatorBindings.SimBindings
 #bindings=DroneSdk.AndroidBindings.DjiBindings
 
 class _Sdk:

@@ -24,37 +24,6 @@ except:
 log = logging.getLogger(__name__)
 
 
-#from sse_starlette.sse import EventSourceResponse
-fastapi_app = FastAPI(title='MavicMax', version='1.0')
-def startup_fastapi():
-    uvicorn.run("app.startup.main:fastapi_app",host='0.0.0.0', port=4557)
-    #uvicorn.run("main:fastapi_app",host='0.0.0.0', port=4557, reload=True, debug=True, workers=3)
-@fastapi_app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-def logGenerator(request, prestring):
-    for i in range(0,100):
-        yield f'{prestring} now{i}'
-        time.sleep(0.1)
-@fastapi_app.get('/stream-logs')
-async def run(request: Request, prestring):
-    event_generator = logGenerator(request, prestring)
-    return EventSourceResponse(event_generator)
-@fastapi_app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    """
-    Create an item with all the information:
-
-    - **name**: each item must have a name
-    - **description**: a long description
-    - **price**: required
-    - **tax**: if the item doesn't have tax, you can omit this
-    - **tags**: a set of unique tag strings for this item
-    \f
-    :param item: User input.
-    """
-    return {"item_id": item_id, "q": q}
 
 
 
@@ -64,7 +33,7 @@ def startup_remi(android_activity):
         app.gui.run(port=8079)
         time.sleep(0.1)
 
-        from DroneSdk.Sdk import Sdk
+        from DroneSdk.Sdk_old import Sdk
         Sdk.Ui.update_url_touch("http://127.0.0.1:8079")
         log.info(f"CSV logdir:{NodeCore.LOGDIR.as_posix()}")
         log.info("First")
@@ -75,15 +44,15 @@ def startup_remi(android_activity):
 
 
 def startup(android_activity):
-    import DroneSdk.AndroidBindings
-    import DroneSdk.PcSimulatorBindings
-    import DroneSdk.Sdk
-    DroneSdk.AndroidBindings.DjiBindings.init(android_activity)
+    import DroneSdk.bindings.AndroidBindings
+    import DroneSdk.bindings.PcSimulatorBindings
+    import DroneSdk.sdk
+    DroneSdk.bindings.AndroidBindings.DjiBindings.init(android_activity)
     if platform.is_running_on_android():
-        DroneSdk.Sdk.bindings = DroneSdk.AndroidBindings.DjiBindings
+        DroneSdk.sdk.current_sdk = DroneSdk.bindings.AndroidBindings.DjiBindings
     else:
-        DroneSdk.Sdk.bindings = DroneSdk.PcSimulatorBindings.SimBindings
-    from DroneSdk.Sdk import Sdk
+        DroneSdk.sdk.current_sdk = DroneSdk.bindings.PcSimulatorBindings
+    from DroneSdk.Sdk_old import Sdk
     logfile = Sdk.Admin.get_log_dir() + '/mavicmax2.log'
     logging.basicConfig(filename=logfile, level=logging.INFO,
                         format='%(asctime)s,%(msecs)d %(levelname)-8s  %(message)s [%(funcName)s() %(filename)s:%(lineno)d]',
@@ -93,7 +62,9 @@ def startup(android_activity):
     try:
         _thread.start_new_thread(startup_remi, (android_activity,))
         start_autostart()
-        startup_fastapi()
+        import DroneSdk.sdk
+        uvicorn.run("DroneSdk.sdk:app", host='0.0.0.0', port=4558, reload=True, debug=True, workers=3)
+
     except:
         print(traceback.format_exc())
 
