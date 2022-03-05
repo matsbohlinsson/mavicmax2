@@ -33,7 +33,6 @@ except:
 
 
 def calc_course(x: float, y: float):
-    r = math.sqrt(x ** 2 + y ** 2)
     theta = math.atan2(y, x)
     degrees = math.degrees(theta)
     if degrees < 0:

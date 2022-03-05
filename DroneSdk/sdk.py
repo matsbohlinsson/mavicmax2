@@ -20,7 +20,7 @@ def get_rc_telemetry() -> models.Rc:
     return current_sdk.get_rc_inputs()
 
 @app_fastapi.post("/start_simulator")
-def start_simulator(self, lat:float = 58.1111, lon: float=11.010203):
+def start_simulator(lat:float = 58.1111, lon: float=11.010203):
     current_sdk.start_simulator(lat, lon)
 
 @app_fastapi.post("/update_url_touch")
@@ -47,11 +47,11 @@ async def restart():
     return "Restarting"
 
 @app_fastapi.get("/get_app_root")
-def get_app_root(self) -> str:
+def get_app_root() -> str:
     return current_sdk.get_app_root()
 
-@app_fastapi.get("/get_app_root")
-def get_git_branch(self) -> str:
+@app_fastapi.get("/get_git_branch")
+def get_git_branch() -> str:
     return current_sdk.get_app_root()
 
 
