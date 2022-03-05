@@ -48,9 +48,11 @@ class _DjiBindings(Bindings):
 
     def get_drone_telemetry(self) -> models.Telemetry:
         djitelemtry =  self.android_activity.pythonToAndroid.getTelemetry()
+        speed_x = djitelemtry.getXSpeed() / 10.0
+        speed_y = djitelemtry.getYSpeed() / 10.0
         telemtry = models.Telemetry(
-            speed_x = djitelemtry.getXSpeed() / 10.0,
-            speed_y = djitelemtry.getYSpeed() / 10.0,
+            speed_x = speed_x,
+            speed_y = speed_y,
             speed_z = djitelemtry.getZSpeed() / 10.0,
             yaw = djitelemtry.getYaw() / 10.0,
             pitch = djitelemtry.getPitch() / 10.0,
@@ -68,8 +70,8 @@ class _DjiBindings(Bindings):
             rpm = -11,  # telemetry.getEscAverageSpeed() dji.midware.data.model.P3.DataFlycGetPushPowerParam.getInstance().getEscAverageSpeed();
             flytime = djitelemtry.getFlyTime(),
             state = str(djitelemtry.getFlycState()),
-            speed_xy = round(math.sqrt(djitelemtry.speed_x ** 2 + djitelemtry.speed_y ** 2), 1),
-            course = round(calc_course(djitelemtry.speed_x, djitelemtry.speed_y), 1)
+            speed_xy = round(math.sqrt(speed_x ** 2 + speed_y ** 2), 1),
+            course = round(calc_course(speed_x, speed_y), 1)
         )
         return telemtry
 
