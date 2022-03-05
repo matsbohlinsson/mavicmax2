@@ -8,6 +8,8 @@ import DroneSdk
 import MavicMaxGui
 import NodeCore
 from NodeCore import Node, Event, plugin_name
+import DroneSdk.sdk as sdk
+
 from DroneSdk.Sdk_old import Sdk
 
 
@@ -40,8 +42,8 @@ class Git(Node):
         self.input.pull.register(lambda : self.pull())
         self.input.status.register(lambda : self.status())
         self.input.autopull = autopull
-        self.output.dir = Sdk.FileSystem.get_app_root()
-        self.output.dir = Sdk.FileSystem.get_app_root()+'/git/mavicmax2'
+        self.output.dir = sdk.get_app_root()
+        self.output.dir = sdk.get_app_root()+'/git/mavicmax2'
         self.input.select = {'a':'=a', 'b':'=b'}
 
 
@@ -50,7 +52,7 @@ class Git(Node):
             branch = Sdk.Git.get_current_branch(self.output.dir)
             self.output.message_screen = Sdk.Git.pull(self.output.dir, branch)
             if "Already-up-to-date" not in self.output.message_screen:
-                Sdk.Admin.restart_app()
+                sdk.restart()
             self.output.branch = branch.split('/')[-1]
         except:
             self.output.branch = "Error1"

@@ -46,7 +46,13 @@ async def restart():
     current_sdk.restart_app()
     return "Restarting"
 
+@app_fastapi.get("/get_app_root")
+def get_app_root(self) -> str:
+    return current_sdk.get_app_root()
 
+@app_fastapi.get("/get_app_root")
+def get_git_branch(self) -> str:
+    return current_sdk.get_app_root()
 
 
 if __name__=="__main__":

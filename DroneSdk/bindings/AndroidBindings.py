@@ -98,6 +98,8 @@ class _DjiBindings(Bindings):
             _thread.start_new_thread(self.android_activity.pythonToAndroid.restartApp,())
         _restart_local()
 
+    def get_app_root(self) -> str:
+        return str(self.android_activity.android_activity.getFilesDir().toString())
 
     def takeoff(self):
         self.android_activity.pythonToAndroid.takeoff()

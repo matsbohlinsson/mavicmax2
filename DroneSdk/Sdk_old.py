@@ -156,8 +156,6 @@ class _Sdk:
             import shutil
             shutil.rmtree(self.dir)
 
-
-
     Git=_Git('','') #_Git(self.python_root, self.python_root)
 
     class _FileSystem:
