@@ -11,6 +11,9 @@ import NodeCore
 from NodeCore import Node, Event, plugin_name
 import DroneSdk
 from DroneSdk.Sdk_old import Sdk
+import DroneSdk.sdk
+from app.util import grep_log
+
 
 def create_node(plugin_name=plugin_name(__file__), parent=None, autopull:bool=False):
     '''
@@ -43,22 +46,12 @@ class Git(Node):
         self.input.upd_logcat.register(lambda : self.refresh('logcat.txt'))
         self.input.upd_log.register(lambda : self.refresh('mavicmax2.log'))
 
-    def get_log(self, logfile_abs: str, grep:str="", exclude:str="", nbr_of_lines=20):
-        lines = Path(logfile_abs).read_text().split('\n')
-        grepped_lines=[]
-        reversed_lines = lines[::-1]
-        index:int=0
-        for line in reversed_lines:
-            if index>nbr_of_lines: break
-            if grep in line and exclude!='' and not exclude in line:
-                grepped_lines.append(line)
-                index+=1
-        return "\n".join(grepped_lines)
 
     def refresh(self, filename):
+        DroneSdk.sdk.get_log_dir()
         logfile_abs = Sdk.Admin.get_log_dir()+f'/{filename}'
         header = f"From file:{logfile_abs}\n"
-        self.output.message_screen = "CLR" +  header + self.get_log(logfile_abs, self.input.grep,  self.input.exclude, self.input.lines)
+        self.output.message_screen = "CLR" +  header + grep_log(logfile_abs, self.input.grep,  self.input.exclude, self.input.lines)
 
     def run(self) -> None:
         today = datetime.now()

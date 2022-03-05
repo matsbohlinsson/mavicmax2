@@ -4,7 +4,8 @@ import DroneSdk.bindings.AndroidBindings
 import DroneSdk.bindings.PcSimulatorBindings
 from DroneSdk import models
 from fastapi import FastAPI
-from app.util import platform
+from app.util import platform, grep_log
+
 log = logging.getLogger(__file__)
 
 current_sdk=DroneSdk.bindings.AndroidBindings.DjiBindings
@@ -41,6 +42,12 @@ def get_log_dir():
 @app_fastapi.post("/test")
 def fastapi_test():
     return "test_ok"
+
+from fastapi.responses import PlainTextResponse
+@app_fastapi.get("/get_log", response_class=PlainTextResponse)
+async def get_log(filename: str='mavicmax2.log', last_lines=250, grep='', exclude='_message(', ):
+    logfile_abs = current_sdk.get_log_dir() + f'/{filename}'
+    return grep_log(logfile_abs, grep, exclude, int(last_lines))
 
 if __name__=="__main__":
     import uvicorn

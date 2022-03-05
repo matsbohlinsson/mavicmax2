@@ -1,5 +1,6 @@
 import math
 import os
+from pathlib import Path
 
 from geographiclib.geodesic import Geodesic
 
@@ -52,6 +53,20 @@ class _Platform:
         else:
             return False
 platform=_Platform()
+
+
+def grep_log(logfile_abs: str, grep: str = "", exclude: str = "", nbr_of_lines=20):
+    lines = Path(logfile_abs).read_text().split('\n')
+    grepped_lines = []
+    reversed_lines = lines[::-1]
+    index: int = 0
+    for line in reversed_lines:
+        if index > nbr_of_lines: break
+        if grep in line and exclude != '' and not exclude in line:
+            grepped_lines.append(line)
+            index += 1
+    return "\n".join(grepped_lines)
+
 
 if __name__ == "__main__":
     l1 = Location(58,11.011,20)
