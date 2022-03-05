@@ -55,7 +55,7 @@ def startup(android_activity):
     NodeCore.LOGDIR = Path(logdir + '/csv')
     try:
         _thread.start_new_thread(startup_remi, (android_activity,))
-        start_autostart()
+        #start_autostart()
         import DroneSdk.sdk
         uvicorn.run("DroneSdk.sdk:app", host='0.0.0.0', port=4557, reload=True, debug=True, workers=3)
 
@@ -74,17 +74,17 @@ if __name__ == "__main__":
 
 
 def testme():
-    api = DroneSdk.AndroidBindings.DjiBindings
+    api = DroneSdk.sdk
     #api.show_toast("Start")
-    api.beep()
-    time.sleep(1)
-    api.beep(freq=2)
-    time.sleep(1)
-    api.start_simulator(58,11)
-    time.sleep(2)
-    api.takeoff()
-    time.sleep(10)
-    api.beep(freq=2)
+    #api.beep()
+    #time.sleep(1)
+    #api.beep(freq=2)
+    #time.sleep(1)
+    #api.start_simulator(58,11)
+    #time.sleep(2)
+    #api.takeoff()
+    #time.sleep(10)
+    #api.beep(freq=2)
     #api.start_virtual_sticks()
     #Flightctrl.set_speed(course=100, speed=10.5, height=10.5, heading=91, duration=30)
     #Flightctrl
