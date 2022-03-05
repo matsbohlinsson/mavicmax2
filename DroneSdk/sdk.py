@@ -9,12 +9,21 @@ import uvicorn
 from sse_starlette import EventSourceResponse
 
 import DroneSdk.bindings.AndroidBindings
-#import DroneSdk.bindings.PcSimulatorBindings
+import DroneSdk.bindings.PcSimulatorBindings
 from DroneSdk import models
 from fastapi import FastAPI
 
+from app.util import platform
+
 log = logging.getLogger(__file__)
 current_sdk=DroneSdk.bindings.AndroidBindings
+'''
+if platform.is_running_on_android():
+    current_sdk = DroneSdk.bindings.AndroidBindings.DjiBindings
+else:
+    current_sdk = DroneSdk.bindings.PcSimulatorBindings
+'''
+
 #bindings=DroneSdk.bindings.PcSimulatorBindings
 app = FastAPI(title='MavicMax', version='1.0')
 
@@ -32,6 +41,14 @@ def get_rc_telemetry() -> models.Rc:
 @app.post("start_simulator")
 def start_simulator(self, lat:float = 58.1111, lon: float=11.010203):
     current_sdk.DjiBindings.start_simulator(lat, lon)
+
+@app.post("update_url_touch")
+def update_url_touch(url:str):
+    current_sdk.DjiBindings.update_url_touch(url)
+
+@app.post("get_log_dir")
+def get_log_dir():
+    return current_sdk.DjiBindings.get_log_dir()
 
 
 #import DroneSdk.sd

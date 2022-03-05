@@ -22,9 +22,10 @@ try:
 except:
     traceback.print_stack()
 log = logging.getLogger(__name__)
-
-
-
+import DroneSdk
+#import DroneSdk.bindings.AndroidBindings
+#import DroneSdk.bindings.PcSimulatorBindings
+import DroneSdk.sdk
 
 
 def startup_remi(android_activity):
@@ -33,8 +34,7 @@ def startup_remi(android_activity):
         app.gui.run(port=8079)
         time.sleep(0.1)
 
-        from DroneSdk.Sdk_old import Sdk
-        Sdk.Ui.update_url_touch("http://127.0.0.1:8079")
+        DroneSdk.sdk.update_url_touch("http://127.0.0.1:8079")
         log.info(f"CSV logdir:{NodeCore.LOGDIR.as_posix()}")
         log.info("First")
     except:
@@ -45,20 +45,14 @@ def startup_remi(android_activity):
 
 def startup(android_activity):
     import DroneSdk.bindings.AndroidBindings
-    import DroneSdk.bindings.PcSimulatorBindings
-    import DroneSdk.sdk
     DroneSdk.bindings.AndroidBindings.DjiBindings.init(android_activity)
-    if platform.is_running_on_android():
-        DroneSdk.sdk.current_sdk = DroneSdk.bindings.AndroidBindings.DjiBindings
-    else:
-        DroneSdk.sdk.current_sdk = DroneSdk.bindings.PcSimulatorBindings
-    from DroneSdk.Sdk_old import Sdk
-    logfile = Sdk.Admin.get_log_dir() + '/mavicmax2.log'
+    logdir = DroneSdk.sdk.get_log_dir()
+    logfile = logdir + '/mavicmax2.log'
     logging.basicConfig(filename=logfile, level=logging.INFO,
                         format='%(asctime)s,%(msecs)d %(levelname)-8s  %(message)s [%(funcName)s() %(filename)s:%(lineno)d]',
                         datefmt='%Y-%m-%d:%H:%M:%S',
                         force=True)
-    NodeCore.LOGDIR = Path(Sdk.Admin.get_log_dir() + '/csv')
+    NodeCore.LOGDIR = Path(logdir + '/csv')
     try:
         _thread.start_new_thread(startup_remi, (android_activity,))
         start_autostart()
