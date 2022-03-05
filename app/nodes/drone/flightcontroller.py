@@ -22,7 +22,7 @@ class Input:
     start_sim: Event = field(default_factory=Event)
     takeoff: Event = field(default_factory=Event)
     start_motors: Event = field(default_factory=Event)
-    set_speed: Event = field(default_factory=Event)
+    virtualstick_on: Event = field(default_factory=Event)
 
 @dataclass
 class Output:
@@ -38,6 +38,7 @@ class FlightController(Node):
         self.input.start_sim.register(sdk.start_simulator)
         self.input.start_motors.register(sdk.start_motors)
         self.input.takeoff.register(sdk.takeoff)
+        self.input.virtualstick_on.register(sdk.start_virtual_sticks)
 
     def run(self) -> None:
         try:

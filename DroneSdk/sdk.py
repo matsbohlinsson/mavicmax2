@@ -28,6 +28,12 @@ def takeoff() -> str:
     current_sdk.takeoff()
     return "OK"
 
+@app_fastapi.post("/start_virtualstick")
+def start_virtual_sticks() -> str:
+    current_sdk.start_virtual_sticks()
+    return "OK"
+
+
 @app_fastapi.post("/set_speed")
 def set_speed(course: float = 45, speed: float = 0.5, height: float = 5.5, heading: float = 23, duration: float = 1.5):
     current_sdk.set_speed(course, speed, height, heading, duration)
