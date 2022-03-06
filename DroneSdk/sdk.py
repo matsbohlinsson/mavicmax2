@@ -1,9 +1,11 @@
 import logging
+from enum import Enum
 
 import DroneSdk.bindings.AndroidBindings as android
 import DroneSdk.bindings.PcSimulatorBindings as desktop
 from DroneSdk import models
 from fastapi import FastAPI
+
 from app.util import platform, grep_log
 
 log = logging.getLogger(__file__)
@@ -64,9 +66,13 @@ def start_virtual_sticks() -> str:
 #  APP  #
 #########
 from fastapi.responses import PlainTextResponse
-@app_fastapi.get("/get_log", response_class=PlainTextResponse, summary="Get current log from mobile device app log and logcat")
-async def get_log(filename: str='mavicmax2.log', last_lines=250, grep='', exclude='_message(', ):
-    logfile_abs = current_sdk.get_log_dir() + f'/{filename}'
+class LogType(str, Enum):
+    app = "mavicmax2.log"
+    logcat = "logcat.txt"
+
+@app_fastapi.get("/get_log", response_class=PlainTextResponse, summary="Get current log from mobile device mavicmax2.log or logcat.txt")
+async def get_log(logname:LogType, last_lines=250, grep='', exclude='_message(', ):
+    logfile_abs = current_sdk.get_log_dir() + f'/{logname}'
     return grep_log(logfile_abs, grep, exclude, int(last_lines))
 
 @app_fastapi.get("/restart", summary="Restart app on mobile device")

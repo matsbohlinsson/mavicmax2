@@ -1,4 +1,5 @@
 import dataclasses
+from enum import Enum
 
 
 @dataclasses.dataclass
@@ -40,3 +41,4 @@ class Rc:
     baro_alt : float = 0.0
     time : float = 0.0
     acc : float = 0.0
+
