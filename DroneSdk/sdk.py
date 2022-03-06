@@ -14,68 +14,84 @@ app_fastapi = FastAPI(title='MavicMax', version='1.0')
 #########
 # Drone #
 #########
-@app_fastapi.post("/start_simulator")
+@app_fastapi.post("/start_simulator", summary="Start drone built-in simulator")
 def start_simulator(lat:float = 58.12345, lon: float=11.987654):
+    """
+    Start drone built in simulator with homepoint lat/lon
+    - **lat**: Homepoint latitude
+    - **lon**: Homepoint longitude
+    """
     current_sdk.start_simulator(lat, lon)
     return "OK"
 
-@app_fastapi.post("/get_drone_telemetry", response_model=models.Telemetry)
+@app_fastapi.post("/get_drone_telemetry", response_model=models.Telemetry, summary="Returns drone data (speed height lat/lon and more)")
 def get_drone_telemetry() -> models.Telemetry:
     return current_sdk.get_drone_telemetry()
 
-@app_fastapi.post("/takeoff")
+@app_fastapi.post("/takeoff", summary="Start takeoff. Hovers 1.2m above ground")
 def takeoff() -> str:
     current_sdk.takeoff()
     return "OK"
 
-@app_fastapi.post("/start_virtualstick")
+@app_fastapi.post("/set_speed", summary="Move drone with speed to direction and height")
+def set_speed(direction: float = 45, speed: float = 0.5, height: float = 5.5, heading: float = 23, duration: float = 1.5):
+    """
+    Move drone with speed to direction and height
+    - **direction**: Direction in 0-360 compass degrees 0.1 step
+    - **speed**: Speed in m/s (0.1 step)
+    - **height**: Goto height (in meters in (0.1m step)
+    - **heading**: Set drone yaw (where camera usually points to)
+    - **duration**: Keep speed for duration seconds
+    """
+    current_sdk.set_speed(direction, speed, height, heading, duration)
+
+@app_fastapi.post("/start_motors",  summary="Start motors with idle speed.")
+def start_motors():
+    current_sdk.start_motors()
+    return "OK"
+
+@app_fastapi.post("/get_rc_telemetry", response_model=models.Rc,  summary="Returns remotecontroll data (stick, buttons, gps and more)")
+def get_rc_telemetry() -> models.Rc:
+    return current_sdk.get_rc_inputs()
+
+@app_fastapi.post("/start_virtualstick", summary="Start virtualstick mode")
 def start_virtual_sticks() -> str:
     current_sdk.start_virtual_sticks()
     return "OK"
 
 
-@app_fastapi.post("/set_speed")
-def set_speed(course: float = 45, speed: float = 0.5, height: float = 5.5, heading: float = 23, duration: float = 1.5):
-    current_sdk.set_speed(course, speed, height, heading, duration)
-
-@app_fastapi.post("/start_motors")
-def start_motors():
-    current_sdk.start_motors()
-
-@app_fastapi.post("/get_rc_telemetry", response_model=models.Rc)
-def get_rc_telemetry() -> models.Rc:
-    return current_sdk.get_rc_inputs()
-
 #########
 #  APP  #
 #########
 from fastapi.responses import PlainTextResponse
-@app_fastapi.get("/get_log", response_class=PlainTextResponse)
+@app_fastapi.get("/get_log", response_class=PlainTextResponse, summary="Get current log from mobile device app log and logcat")
 async def get_log(filename: str='mavicmax2.log', last_lines=250, grep='', exclude='_message(', ):
     logfile_abs = current_sdk.get_log_dir() + f'/{filename}'
     return grep_log(logfile_abs, grep, exclude, int(last_lines))
+
+@app_fastapi.get("/restart", summary="Restart app on mobile device")
+async def restart():
+    current_sdk.restart_app()
+    return "Restarting"
+
+@app_fastapi.post("/get_log_dir")
+def get_log_dir():
+    return current_sdk.get_log_dir()
+'''
+@app_fastapi.post("/test")
+def fastapi_test():
+    return "test_ok"
+
+
+@app_fastapi.get("/get_app_root")
+def get_app_root() -> str:
+    return current_sdk.get_app_root()
 
 @app_fastapi.post("/update_url_touch")
 def update_url_touch(url:str):
     current_sdk.update_url_touch(url)
     return "OK"
-
-@app_fastapi.post("/get_log_dir")
-def get_log_dir():
-    return current_sdk.get_log_dir()
-
-@app_fastapi.post("/test")
-def fastapi_test():
-    return "test_ok"
-
-@app_fastapi.get("/restart")
-async def restart():
-    current_sdk.restart_app()
-    return "Restarting"
-
-@app_fastapi.get("/get_app_root")
-def get_app_root() -> str:
-    return current_sdk.get_app_root()
+'''
 
 
 #########
