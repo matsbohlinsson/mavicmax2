@@ -19,7 +19,7 @@ message_field_name: str = 'message_screen'
 @dataclasses.dataclass
 class _NodeRunner():
     node_list: [Node] = dataclasses.field(default_factory=list)
-    loop_delay_ms: int = 140
+    loop_delay_ms: int = 100
     loop_nbr:int  = 0
     running:bool = False
 
