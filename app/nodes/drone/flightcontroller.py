@@ -10,7 +10,7 @@ def create_node(plugin_name=plugin_name(__file__), parent=None):
 
 @dataclass
 class Input:
-    enable_vs: int = 0
+    enable_ctrl: int = 0
     height: float = 0
     course: float = 0
     speed: float = 0
@@ -37,12 +37,11 @@ class FlightController(Node):
         self.input.start_sim.register(sdk.start_simulator)
         self.input.start_motors.register(sdk.start_motors)
         self.input.takeoff.register(sdk.takeoff)
-        self.input.virtualstick_on.register(sdk.start_virtual_sticks)
 
     def run(self) -> None:
         try:
             i = self.input
-            if i.kill_switch:
+            if i.enable_ctrl:
                 sdk.set_speed(course=i.course, speed=i.speed, height=i.height, heading=i.heading, duration=0.5)
         except:
             log.exception("flightcontroller")
