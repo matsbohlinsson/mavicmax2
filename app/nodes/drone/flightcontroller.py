@@ -10,7 +10,7 @@ def create_node(plugin_name=plugin_name(__file__), parent=None):
 
 @dataclass
 class Input:
-    kill_switch: int = 0
+    enable_vs: int = 0
     height: float = 0
     course: float = 0
     speed: float = 0
@@ -22,7 +22,6 @@ class Input:
     start_sim: Event = field(default_factory=Event)
     takeoff: Event = field(default_factory=Event)
     start_motors: Event = field(default_factory=Event)
-    virtualstick_on: Event = field(default_factory=Event)
 
 @dataclass
 class Output:
