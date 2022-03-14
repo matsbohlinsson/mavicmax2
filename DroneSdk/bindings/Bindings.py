@@ -1,27 +1,7 @@
 import dataclasses
 from abc import ABC, abstractmethod
 
-@dataclasses.dataclass()
-class Telemetry:
-    speed_x: float = 0
-    speed_y: float = 0
-    speed_z: float = 0
-    yaw: float = 0
-    pitch: float = 0
-    roll: float = 0
-    lat: float = 0
-    lon: float = 0
-    height: float = 0
-    isFlying: int = 0
-    gps_lev: int = -1
-    flight_mode: str = ''
-    drone_type: str = ''
-    terrain_height: float = -1.0
-    rpm: int = -1
-    flytime: int = -1
-    state: str = ''
-    speed_xy: float = 0.0
-    course: float = 0.0
+from DroneSdk.models import Telemetry
 
 
 class Bindings(ABC):
@@ -30,6 +10,7 @@ class Bindings(ABC):
 
     @abstractmethod
     def get_drone_telemetry(self) -> Telemetry:
+        return Telemetry()
         pass
     @abstractmethod
     def start_virtual_sticks(self):
