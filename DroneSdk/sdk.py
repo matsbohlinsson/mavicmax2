@@ -154,6 +154,7 @@ async def runStatus(request: Request):
     event_generator = logGenerator(request)
     return EventSourceResponse(event_generator)
 
+
 @app_fastapi.post("/update_url_touch")
 def update_url_touch(url:str):
     current_sdk.update_url_touch(url)
