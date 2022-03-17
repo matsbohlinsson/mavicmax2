@@ -2,8 +2,11 @@ import logging
 import time
 from enum import Enum
 
+import cv2
 from fastapi import FastAPI, Request
 from sse_starlette.sse import EventSourceResponse
+from starlette.responses import StreamingResponse
+
 import DroneSdk.bindings.AndroidBindings as android
 import DroneSdk.bindings.PcSimulatorBindings as desktop
 from DroneSdk import models
@@ -86,6 +89,23 @@ async def restart():
 @app_fastapi.post("/get_log_dir")
 def get_log_dir():
     return current_sdk.get_log_dir()
+
+def generate():
+    cap = cv2.VideoCapture(0)
+    while True:
+        cap.grab()
+        ret, frame = cap.read()
+        #frame = cv2.resize(frame, None, fx=4, fy=4, interpolation=cv2.INTER_LINEAR)
+        (flag, encodedImage) = cv2.imencode(".jpg", frame)
+        yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
+               bytearray(encodedImage) + b'\r\n')
+
+
+@app_fastapi.get('/stream-fpv')
+async def stream_fpv(request: Request):
+    return StreamingResponse(generate(), media_type="multipart/x-mixed-replace;boundary=frame")
+
+
 
 async def logGenerator(request):
     for line in [f'hej {x}' for x in range(100)]:
