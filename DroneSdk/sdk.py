@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 from fastapi import FastAPI, Request
 from sse_starlette.sse import EventSourceResponse
-from starlette.responses import StreamingResponse
+from starlette.responses import StreamingResponse, Response
 
 import DroneSdk.bindings.AndroidBindings as android
 import DroneSdk.bindings.PcSimulatorBindings as desktop
@@ -119,6 +119,12 @@ def save_frame_to_file(filename: str, jpeg_compression: int):
     filepath = f'{get_app_root()}/{filename}'
     current_sdk.saveFrameToFile(filename=filepath, jpeg_compression=jpeg_compression)
     return filepath
+
+@app_fastapi.get('/get_jpg_file')
+def get_jpg_file(filename: str):
+    filepath = f'{get_app_root()}/{filename}'
+    b = Path(filepath).read_bytes()
+    return Response(content=b, media_type="image/jpg")
 
 
 @app_fastapi.get('/stream-fpv')

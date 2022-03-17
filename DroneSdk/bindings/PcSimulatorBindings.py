@@ -89,7 +89,7 @@ class _SimBindings(Bindings):
         return bytearray(Path('c:\\tmp/snail.bmp').read_bytes())
 
     def get_app_root(self) -> str:
-        return str("APPROOT")
+        return get_simulated_app_root()
 
 
     def saveFrameToFile(self, filename: str, jpeg_compression: int) -> None:
