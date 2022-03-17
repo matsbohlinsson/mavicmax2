@@ -139,7 +139,7 @@ async def stream_fpv(request: Request, jpeg_compression=10):
         while True:
             filename = 'stream.jpg'
             save_frame_to_file(filename=filename, jpeg_compression=int(jpeg_compression))
-            time.sleep(0.1)
+            time.sleep(0.05)
             filepath = f'{get_app_root()}/{filename}'
             b = Path(filepath).read_bytes()
             yield (b'--frame\r\n' b'Content-Type: image/jpg\r\n\r\n' +
