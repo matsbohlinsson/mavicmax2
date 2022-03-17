@@ -115,7 +115,7 @@ def getBitmapByteArray() -> bytearray:
     return current_sdk.getBitmapByteArray()
 
 @app_fastapi.get('/save-frame-to-file')
-def save_frame_to_file(filename: str, jpeg_compression: int):
+def save_frame_to_file(filename: str, jpeg_compression: int=10):
     filepath = f'{get_app_root()}/{filename}'
     current_sdk.saveFrameToFile(filename=filepath, jpeg_compression=jpeg_compression)
     return filepath
@@ -134,11 +134,11 @@ def get_fpv_frame(quality:int=20):
 
 
 @app_fastapi.get('/stream-fpv')
-async def stream_fpv(request: Request):
+async def stream_fpv(request: Request, jpeg_compression=10):
     def generate():
         while True:
             filename = 'stream.jpg'
-            save_frame_to_file(filename)
+            save_frame_to_file(filename=filename, jpeg_compression=jpeg_compression)
             filepath = f'{get_app_root()}/{filename}'
             b = Path(filepath).read_bytes()
             yield (b'--frame\r\n' b'Content-Type: image/jpg\r\n\r\n' +
