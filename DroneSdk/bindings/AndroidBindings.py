@@ -182,6 +182,9 @@ class _DjiBindings(Bindings):
     def get_log_dir(self):
         return self.android_activity.pythonToAndroid.getLogDir()
 
+    def getBitmapByteArray(self) -> bytearray:
+        return self.android_activity.pythonToAndroid.getBitmapByteArray()
+
     def update_url_touch(self, url:str):
         return self.android_activity.pythonToAndroid.update_url_touch(url)
 

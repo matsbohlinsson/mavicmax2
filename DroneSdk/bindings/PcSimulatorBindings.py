@@ -1,3 +1,7 @@
+from pathlib import Path
+
+import cv2
+
 from DroneSdk.bindings.Bindings import Bindings, Telemetry
 from simulated_app_root_logs_userdata import get_simulated_app_root
 
@@ -80,6 +84,22 @@ class _SimBindings(Bindings):
 
     def set_key_value(self, keystring:str, value):
         self.android_activity.pythonToAndroid.setKeyValue(keystring, value)
+
+    def getBitmapByteArray(self) -> bytearray:
+        return bytearray(Path('c:\\tmp/snail.bmp').read_bytes())
+        '''    async def stream_fpv():
+                def generate():
+                    while True:
+                        bitmap = Path('c:\\tmp/snail.bmp').read_bytes()
+                        deserialized_bytes = np.frombuffer(bitmap, dtype=np.uint8)
+                        #conv = np.reshape(deserialized_bytes, newshape=(256, 256, 4))
+                        #conv2 = cv2.cvtColor(conv, cv2.COLOR_BGRA2RGBA)
+                        encodedImage = cv2.imencode(".bmp", deserialized_bytes)
+
+                        yield (b'--frame\r\n' b'Content-Type: image/jpg\r\n\r\n' +
+                               bytearray(encodedImage) + b'\r\n')
+                return StreamingResponse(generate(), media_type="multipart/x-mixed-replace;boundary=frame")
+        '''
 
 
 SimBindings=_SimBindings(None)

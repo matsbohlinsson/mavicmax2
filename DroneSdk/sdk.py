@@ -1,8 +1,10 @@
 import logging
 import time
 from enum import Enum
+from pathlib import Path
 
 import cv2
+import numpy as np
 from fastapi import FastAPI, Request
 from sse_starlette.sse import EventSourceResponse
 from starlette.responses import StreamingResponse
@@ -90,19 +92,51 @@ async def restart():
 def get_log_dir():
     return current_sdk.get_log_dir()
 
-def generate():
-    cap = cv2.VideoCapture(0)
-    while True:
-        cap.grab()
-        ret, frame = cap.read()
-        #frame = cv2.resize(frame, None, fx=4, fy=4, interpolation=cv2.INTER_LINEAR)
-        (flag, encodedImage) = cv2.imencode(".jpg", frame)
-        yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
-               bytearray(encodedImage) + b'\r\n')
+@app_fastapi.get("/debug1")
+def debug1():
+    '''    for i in range(0, 100):
+            # TODO Read out size from bitmap and use in newshape
+            bitmap = api.ui.get_frame_bitmap_byte_array()
+            deserialized_bytes = np.frombuffer(bitmap, dtype=np.uint8)
+            conv = np.reshape(deserialized_bytes, newshape=(1080, 1920, 4))
+            conv2 = cv2.cvtColor(conv, cv2.COLOR_BGRA2RGBA)
+            image_data = cv2.resize(conv, (int(1080 / 2), int(1920 / 2)))
+            conv3 = increase_brightness(conv2, 50)
+            cv2.imwrite(filename, conv3)
+    '''
+    return "debug1"
 
+def getBitmapByteArray() -> bytearray:
+    return current_sdk.getBitmapByteArray()
 
 @app_fastapi.get('/stream-fpv')
 async def stream_fpv(request: Request):
+    def generate():
+        while True:
+            bitmap = getBitmapByteArray()
+            deserialized_bytes = np.frombuffer(bitmap, dtype=np.uint8)
+            conv = np.reshape(deserialized_bytes, newshape=(1080, 1920, 4))
+            #conv2 = cv2.cvtColor(conv, cv2.COLOR_BGRA2RGBA)
+            image_data = cv2.resize(conv, (int(1080/2), int(1920/2)))
+            encodedImage = cv2.imencode(".jpg", deserialized_bytes)
+            yield (b'--frame\r\n' b'Content-Type: image/jpg\r\n\r\n' +
+                   bytearray(encodedImage) + b'\r\n')
+    return StreamingResponse(generate(), media_type="multipart/x-mixed-replace;boundary=frame")
+
+
+
+@app_fastapi.get('/stream-fpv-test')
+async def stream_fpv_test(request: Request):
+    def generate():
+        cap = cv2.VideoCapture(0)
+        while True:
+            cap.grab()
+            ret, frame = cap.read()
+            # frame = cv2.resize(frame, None, fx=4, fy=4, interpolation=cv2.INTER_LINEAR)
+            (flag, encodedImage) = cv2.imencode(".jpg", frame)
+            yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
+                   bytearray(encodedImage) + b'\r\n')
+
     return StreamingResponse(generate(), media_type="multipart/x-mixed-replace;boundary=frame")
 
 
