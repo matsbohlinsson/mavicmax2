@@ -1,6 +1,9 @@
 import logging
+import time
 from enum import Enum
 
+from fastapi import FastAPI, Request
+from sse_starlette.sse import EventSourceResponse
 import DroneSdk.bindings.AndroidBindings as android
 import DroneSdk.bindings.PcSimulatorBindings as desktop
 from DroneSdk import models
@@ -83,6 +86,21 @@ async def restart():
 @app_fastapi.post("/get_log_dir")
 def get_log_dir():
     return current_sdk.get_log_dir()
+
+async def logGenerator(request):
+    for line in [f'hej {x}' for x in range(100)]:
+        if await request.is_disconnected():
+            print("client disconnected!!!")
+            break
+        yield line
+        time.sleep(0.5)
+
+@app_fastapi.get('/stream-logs')
+async def runStatus(request: Request):
+    event_generator = logGenerator(request)
+    return EventSourceResponse(event_generator)
+
+
 '''
 @app_fastapi.post("/test")
 def fastapi_test():
