@@ -137,14 +137,12 @@ def get_fpv_frame(quality:int=20):
 async def stream_fpv(request: Request):
     def generate():
         while True:
-            bitmap = getBitmapByteArray()
-            deserialized_bytes = np.frombuffer(bitmap, dtype=np.uint8)
-            conv = np.reshape(deserialized_bytes, newshape=(1080, 1920, 4))
-            #conv2 = cv2.cvtColor(conv, cv2.COLOR_BGRA2RGBA)
-            image_data = cv2.resize(conv, (int(1080/2), int(1920/2)))
-            encodedImage = cv2.imencode(".jpg", deserialized_bytes)
+            filename = 'stream.jpg'
+            save_frame_to_file(filename)
+            filepath = f'{get_app_root()}/{filename}'
+            b = Path(filepath).read_bytes()
             yield (b'--frame\r\n' b'Content-Type: image/jpg\r\n\r\n' +
-                   bytearray(encodedImage) + b'\r\n')
+                   bytearray(b) + b'\r\n')
     return StreamingResponse(generate(), media_type="multipart/x-mixed-replace;boundary=frame")
 
 
