@@ -154,6 +154,15 @@ async def runStatus(request: Request):
     event_generator = logGenerator(request)
     return EventSourceResponse(event_generator)
 
+@app_fastapi.post("/update_url_touch")
+def update_url_touch(url:str):
+    current_sdk.update_url_touch(url)
+    return "OK"
+
+@app_fastapi.get("/get_app_root")
+def get_app_root() -> str:
+    return current_sdk.get_app_root()
+
 
 '''
 @app_fastapi.post("/test")
@@ -161,14 +170,7 @@ def fastapi_test():
     return "test_ok"
 
 
-@app_fastapi.get("/get_app_root")
-def get_app_root() -> str:
-    return current_sdk.get_app_root()
 
-@app_fastapi.post("/update_url_touch")
-def update_url_touch(url:str):
-    current_sdk.update_url_touch(url)
-    return "OK"
 '''
 
 
