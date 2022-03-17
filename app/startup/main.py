@@ -28,7 +28,7 @@ def startup_remi(android_activity):
         print(f"startup_test_dji_remove_me:{android_activity}")
         app.gui.run(port=8079)
         time.sleep(0.1)
-        sdk.get_drone_telemetry.update_url_touch("http://127.0.0.1:8079")
+        sdk.update_url_touch("http://127.0.0.1:8079")
         log.info(f"CSV logdir:{NodeCore.LOGDIR.as_posix()}")
     except:
         log.exception('startup_remi')
