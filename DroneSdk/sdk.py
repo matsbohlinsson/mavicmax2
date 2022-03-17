@@ -130,8 +130,7 @@ def get_jpg_file(filename: str):
 def get_fpv_frame(quality:int=20):
     fpv_file_name='current_fpv.jpg'
     save_frame_to_file(fpv_file_name, quality)
-    b = Path(fpv_file_name).read_bytes()
-    return Response(content=b, media_type="image/jpg")
+    return get_jpg_file(fpv_file_name)
 
 
 @app_fastapi.get('/stream-fpv')
