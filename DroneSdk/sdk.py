@@ -114,6 +114,13 @@ def update_url_touch(url:str):
 def getBitmapByteArray() -> bytearray:
     return current_sdk.getBitmapByteArray()
 
+@app_fastapi.get('/save-frame-to-file')
+def save_frame_to_file(filename: str, jpeg_compression: int):
+    filepath = f'{get_app_root()}/{filename}'
+    current_sdk.saveFrameToFile(filename=filepath, jpeg_compression=jpeg_compression)
+    return filepath
+
+
 @app_fastapi.get('/stream-fpv')
 async def stream_fpv(request: Request):
     def generate():

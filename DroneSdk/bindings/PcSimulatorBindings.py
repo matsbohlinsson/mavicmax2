@@ -87,6 +87,14 @@ class _SimBindings(Bindings):
 
     def getBitmapByteArray(self) -> bytearray:
         return bytearray(Path('c:\\tmp/snail.bmp').read_bytes())
+
+    def get_app_root(self) -> str:
+        return str("APPROOT")
+
+
+    def saveFrameToFile(self, filename: str, jpeg_compression: int) -> None:
+        print(f"saveFrameToFile:{filename} {jpeg_compression}")
+
         '''    async def stream_fpv():
                 def generate():
                     while True:

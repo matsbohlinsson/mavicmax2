@@ -185,6 +185,9 @@ class _DjiBindings(Bindings):
     def getBitmapByteArray(self) -> bytearray:
         return self.android_activity.pythonToAndroid.getBitmapByteArray()
 
+    def saveFrameToFile(self, filename:str, jpeg_compression: int) -> bytearray:
+        return self.android_activity.pythonToAndroid.saveFrameToFile(filename, jpeg_compression)
+
     def update_url_touch(self, url:str):
         return self.android_activity.pythonToAndroid.update_url_touch(url)
 
