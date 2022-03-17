@@ -119,7 +119,7 @@ class _DjiBindings(Bindings):
         _restart_local()
 
     def get_app_root(self) -> str:
-        return str(self.android_activity.android_activity.getFilesDir().toString())
+        return str(self.android_activity.getFilesDir().toString())
 
     def takeoff(self):
         self.android_activity.pythonToAndroid.takeoff()
