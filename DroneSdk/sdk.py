@@ -106,6 +106,11 @@ def debug1():
     '''
     return "debug1_"
 
+@app_fastapi.post("/update_url_touch")
+def update_url_touch(url:str):
+    current_sdk.update_url_touch(url)
+    return "OK"
+
 def getBitmapByteArray() -> bytearray:
     return current_sdk.getBitmapByteArray()
 
@@ -136,7 +141,6 @@ async def stream_fpv_test(request: Request):
             (flag, encodedImage) = cv2.imencode(".jpg", frame)
             yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
                    bytearray(encodedImage) + b'\r\n')
-
     return StreamingResponse(generate(), media_type="multipart/x-mixed-replace;boundary=frame")
 
 
@@ -150,15 +154,11 @@ async def logGenerator(request):
         time.sleep(0.5)
 
 @app_fastapi.get('/stream-logs')
-async def runStatus(request: Request):
+async def stream_logs(request: Request):
     event_generator = logGenerator(request)
     return EventSourceResponse(event_generator)
 
 
-@app_fastapi.post("/update_url_touch")
-def update_url_touch(url:str):
-    current_sdk.update_url_touch(url)
-    return "OK"
 
 @app_fastapi.get("/get_app_root")
 def get_app_root() -> str:
