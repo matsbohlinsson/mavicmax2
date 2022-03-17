@@ -104,7 +104,7 @@ def debug1():
             conv3 = increase_brightness(conv2, 50)
             cv2.imwrite(filename, conv3)
     '''
-    return "debug1"
+    return "debug1_"
 
 def getBitmapByteArray() -> bytearray:
     return current_sdk.getBitmapByteArray()
