@@ -210,6 +210,13 @@ def fastapi_test():
 def get_git_branch(dir: str) -> str:
     return current_sdk.get_app_root()
 
+@app_fastapi.get("/git_pull")
+def git_pull(self, dir, branchName):
+    return current_sdk.git_pull(dir, branchName)
+
+@app_fastapi.get("/git_status")
+def git_status(self, dir):
+    return current_sdk.git_status(dir)
 
 
 if __name__=="__main__":

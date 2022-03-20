@@ -207,6 +207,12 @@ class _DjiBindings(Bindings):
         self.android_activity.pythonToAndroid.sendVirtualStickRaw(int(flag), float(height), float(roll), float(pitch),
                                                                   float(yaw), int(duration) * 1000)
 
+    def git_pull(self, dir, branchName):
+        return self.android_activity.pythonToAndroid.pull(dir, branchName)
+
+    def git_status(self, dir):
+        return self.android_activity.pythonToAndroid.status(dir)
+
 
 DjiBindings=_DjiBindings(None)
 

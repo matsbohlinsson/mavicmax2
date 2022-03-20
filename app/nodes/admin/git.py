@@ -56,8 +56,7 @@ class Git(Node):
             logging.exception("")
 
     def status(self):
-        self.output.message_screen = "Din mamma"
-        #self.output.message = Sdk.Git.status()
+        self.output.message_screen = sdk.git_status(self.output.dir)
 
     def run(self) -> None:
         if self.input.autopull:
