@@ -8,20 +8,19 @@ import numpy as np
 from fastapi import FastAPI, Request
 from sse_starlette.sse import EventSourceResponse
 from starlette.responses import StreamingResponse, Response
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
 import DroneSdk.bindings.AndroidBindings as android
 import DroneSdk.bindings.PcSimulatorBindings as desktop
+import config
 from DroneSdk import models
 from fastapi import FastAPI
 
 from app.util import platform, grep_log
+from config import settings
 
 log = logging.getLogger(__file__)
 
 current_sdk= android.DjiBindings if platform.is_running_on_android() else desktop.SimBindings
-app_fastapi = FastAPI(title='MavicMax', version='1.0')
-
+app_fastapi = config.app_fastapi
 #########
 # Drone #
 #########
@@ -201,38 +200,6 @@ def fastapi_test():
 def get_git_branch() -> str:
     return current_sdk.get_app_root()
 
-
-# HTML
-import urllib
-class CustomURLProcessor:
-    def __init__(self):
-        self.path = ""
-        self.request = None
-
-    def url_for2(self, request: Request, name: str):
-        return  f"{request.base_url}{name}"
-        #self.path = request.url_for(name)
-        self.request = request
-        print("QQQQ", name)
-        return self
-
-    def url_for(self, request: Request, name: str, **params: str):
-        self.path = request.url_for(name, **params)
-        self.request = request
-        return self
-
-    def include_query_params(self, **params: str):
-        parsed = list(urllib.parse.urlparse(self.path))
-        parsed[4] = urllib.parse.urlencode(params)
-        return urllib.parse.urlunparse(parsed)
-
-from fastapi.templating import Jinja2Templates
-templates = Jinja2Templates(directory="templates")
-templates.env.globals['CustomURLProcessor'] = CustomURLProcessor
-app_fastapi.mount("/static", StaticFiles(directory="static"), name="static")
-@app_fastapi.get("/items/{id}", response_class=HTMLResponse)
-async def read_item(request: Request, id: str):
-    return templates.TemplateResponse("item2.html", {"request": request, "id": id})
 
 
 if __name__=="__main__":

@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from pathlib import Path
 import shutil
 
+from fastapi import FastAPI
+
 
 @dataclass
 class TestSettings:
@@ -36,7 +38,7 @@ class Settings:
     filesystem: FileSystem = FileSystem()
 
 settings=Settings()
-
+app_fastapi = FastAPI(title='MavicMax', version='1.0')
 
 if __name__ == "__main__":
     print(settings.logs.txt_dir)
