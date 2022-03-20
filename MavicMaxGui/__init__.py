@@ -722,7 +722,6 @@ class View:
 
     def get_changed_fields(self) -> typing.Dict[str, str]:
         input_field_values_dict = {}
-        print(f'Q {self.changed_fields_from_gui=}')
         for field_name in self.changed_fields_from_gui:
             field = self.input_fields[field_name]
             value = "valueerror"

@@ -38,9 +38,9 @@ class Git(Node):
         self.input.pull.register(lambda : self.pull())
         self.input.status.register(lambda : self.status())
         self.input.autopull = autopull
-        self.output.dir = sdk.get_app_root()
         self.output.dir = sdk.get_app_root()+'/git/mavicmax2'
         self.input.select = {'a':'=a', 'b':'=b'}
+        sdk.restart()
 
 
     def pull(self):
