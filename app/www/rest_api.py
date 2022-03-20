@@ -23,10 +23,10 @@ class CustomURLProcessor:
 
 
 from fastapi.templating import Jinja2Templates
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="../www/templates")
 templates.env.globals['CustomURLProcessor'] = CustomURLProcessor
-app_fastapi.mount("/static", StaticFiles(directory="static"), name="static")
-app_fastapi.mount("/images", StaticFiles(directory="static/images"), name="images")
+app_fastapi.mount("/static", StaticFiles(directory="../www/static"), name="static")
+app_fastapi.mount("/images", StaticFiles(directory="../www/static/images"), name="images")
 @app_fastapi.get("/items/{id}", response_class=HTMLResponse)
 async def read_item(request: Request, id: str):
     return templates.TemplateResponse("item2.html", {"request": request, "id": id})
