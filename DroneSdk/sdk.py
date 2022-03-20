@@ -200,6 +200,10 @@ def fastapi_test():
 def get_git_branch() -> str:
     return current_sdk.get_app_root()
 
+@app_fastapi.get("/get_git_branch2")
+def get_git_branch() -> str:
+    return current_sdk.get_app_root()
+
 
 
 if __name__=="__main__":

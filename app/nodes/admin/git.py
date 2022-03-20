@@ -7,7 +7,6 @@ import NodeCore
 from NodeCore import Node, Event, plugin_name
 import DroneSdk.sdk as sdk
 
-from DroneSdk.Sdk_old import Sdk
 
 
 def create_node(plugin_name=plugin_name(__file__), parent=None, autopull:bool=False):
@@ -35,7 +34,7 @@ class Git(Node):
     def __init__(self, autopull: bool=True, *args, **kwargs) -> None:
         input, output = Input(), Output()
         super().__init__(input=input, output=output, *args, **kwargs)
-        self.input.restart.register(lambda : Sdk.Admin.restart_app())
+        self.input.restart.register(lambda : sdk.restart())
         self.input.pull.register(lambda : self.pull())
         self.input.status.register(lambda : self.status())
         self.input.autopull = autopull
@@ -46,8 +45,8 @@ class Git(Node):
 
     def pull(self):
         try:
-            branch = Sdk.Git.get_current_branch(self.output.dir)
-            self.output.message_screen = Sdk.Git.pull(self.output.dir, branch)
+            branch = sdk.get_git_branch(self.output.dir)
+            self.output.message_screen = sdk.git(self.output.dir, branch)
             if "Already-up-to-date" not in self.output.message_screen:
                 sdk.restart()
             self.output.branch = branch.split('/')[-1]
