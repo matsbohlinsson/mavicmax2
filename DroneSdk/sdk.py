@@ -197,11 +197,7 @@ def fastapi_test():
 #  GIT  #
 #########
 @app_fastapi.get("/get_git_branch")
-def get_git_branch() -> str:
-    return current_sdk.get_app_root()
-
-@app_fastapi.get("/get_git_branch2")
-def get_git_branch() -> str:
+def get_git_branch(dir: str) -> str:
     return current_sdk.get_app_root()
 
 
