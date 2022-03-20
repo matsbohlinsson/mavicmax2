@@ -47,7 +47,8 @@ class Git(Node):
             branch = sdk.get_git_branch(self.output.dir)
             #self.output.message_screen = sdk.git(self.output.dir, branch)
             if "Already-up-to-date" not in self.output.message_screen:
-                sdk.restart()
+                pass
+                #sdk.restart()
             self.output.branch = branch.split('/')[-1]
         except:
             self.output.branch = "Error1"
