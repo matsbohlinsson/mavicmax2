@@ -31,7 +31,7 @@ class Output:
 class Git(Node):
     input: Input
     output: Output
-    def __init__(self, autopull: bool=False, *args, **kwargs) -> None:
+    def __init__(self, autopull: bool=True, *args, **kwargs) -> None:
         input, output = Input(), Output()
         super().__init__(input=input, output=output, *args, **kwargs)
         self.input.restart.register(lambda : sdk.restart())
@@ -46,9 +46,7 @@ class Git(Node):
         try:
             self.output.message_screen = sdk.git_pull(self.output.dir)
             if "Already-up-to-date" not in self.output.message_screen:
-                pass
-                #sdk.restart()
-            #self.output.branch = branch.split('/')[-1]
+                sdk.restart()
         except:
             self.output.branch = "Error1"
             print(f"ERROR{traceback.format_exc()}")
