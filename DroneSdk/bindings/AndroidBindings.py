@@ -208,7 +208,7 @@ class _DjiBindings(Bindings):
                                                                   float(yaw), int(duration) * 1000)
 
     def git_pull(self, dir):
-        branchName = self.android_activity.pythonToAndroid.get_full_branch(dir)
+        branchName = self.android_activity.pythonToAndroid.getFullBranch(dir)
         return self.android_activity.pythonToAndroid.pull(dir, branchName)
 
     def git_status(self, dir):
