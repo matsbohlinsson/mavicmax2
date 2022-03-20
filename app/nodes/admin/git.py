@@ -55,6 +55,7 @@ class Git(Node):
             print(f"ERROR{traceback.format_exc()}")
             logging.exception("")
 
+
     def status(self):
         self.output.message_screen = sdk.git_status(self.output.dir)
 
