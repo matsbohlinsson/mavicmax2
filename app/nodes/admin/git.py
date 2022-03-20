@@ -42,6 +42,7 @@ class Git(Node):
         self.input.select = {'a':'=a', 'b':'=b'}
 
 
+
     def pull(self):
         try:
             self.output.message_screen = sdk.git_pull(self.output.dir)
