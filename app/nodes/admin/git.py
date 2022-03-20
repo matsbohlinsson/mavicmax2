@@ -46,7 +46,7 @@ class Git(Node):
     def pull(self):
         try:
             branch = sdk.get_git_branch(self.output.dir)
-            self.output.message_screen = sdk.git(self.output.dir, branch)
+            #self.output.message_screen = sdk.git(self.output.dir, branch)
             if "Already-up-to-date" not in self.output.message_screen:
                 sdk.restart()
             self.output.branch = branch.split('/')[-1]
@@ -56,8 +56,8 @@ class Git(Node):
             logging.exception("")
 
     def status(self):
-        #self.output.message_screen = "Din mamma"
-        self.output.message = Sdk.Git.status()
+        self.output.message_screen = "Din mamma"
+        #self.output.message = Sdk.Git.status()
 
     def run(self) -> None:
         if self.input.autopull:
