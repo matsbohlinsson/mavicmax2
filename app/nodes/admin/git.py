@@ -20,7 +20,7 @@ class Input:
     restart: Event = field(default_factory=Event)
     pull: Event = field(default_factory=Event)
     status: Event = field(default_factory=Event)
-    select: str = "QQ"
+    select: str = ""
     autopull: bool = False
 @dataclass
 class Output:

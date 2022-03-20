@@ -28,17 +28,14 @@ def read_item(item_id: int, q: Optional[str] = None):
 
 @app.put("/items/{item_id}")
 def update_item(item_id: int, item: Item):
-    print("QQQ", item_id, item.name)
     return {"item_name": item.name, "item_id": item_id}
 
 @app.put("/items2/{item_id}")
 def update_item2(item_id: int, mynumber:float, mystring:str):
-    print("QQQ", item_id, mynumber, mystring)
     return {"item_name": mynumber, "item_id": item_id}
 
 @app.put("/items3/{item_id}")
 def update_item2(item_id: int, mynumber:float, mystring:str):
-    print("QQQ", item_id, mynumber, mystring)
     r = {'a':'123', 'b':456}
     return r
 

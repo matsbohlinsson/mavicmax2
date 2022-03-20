@@ -272,12 +272,9 @@ class Node(ABC):
         self.blocking=False
 
     def update_input_fields_from_dict(self, fields_dict:{}):
-        print("QQQ", f'{fields_dict=}')
         for field_name,  value in fields_dict.items():
-            print("QQQQ", f'{getattr(self.input, field_name)}')
             try:
                 getattr(self.input, field_name).set(value) #class
-                print("QQQQQ", f'{getattr(self.input, field_name)}')
             except:
                 self.input.__setattr__(field_name,value) #builtin
 

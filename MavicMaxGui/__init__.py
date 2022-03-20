@@ -734,7 +734,6 @@ class View:
                 #value = field.type(field.get_value())
             input_field_values_dict.update({field_name: value})
         self.changed_fields_from_gui={}
-        print(f'QQ {input_field_values_dict=}')
         return input_field_values_dict
 
 
