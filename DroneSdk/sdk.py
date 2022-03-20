@@ -86,6 +86,8 @@ async def get_log(logname:LogType, last_lines=250, grep='', exclude='_message(',
 
 @app_fastapi.get("/restart", summary="Restart app on mobile device")
 def restart():
+    log.info("Restart")
+    print("Restart")
     current_sdk.restart_app()
     return "Restarting"
 
