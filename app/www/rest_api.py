@@ -4,6 +4,7 @@ import config
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 import DroneSdk.sdk
+from DroneSdk import sdk
 
 app_fastapi = config.app_fastapi
 
@@ -23,10 +24,11 @@ class CustomURLProcessor:
 
 
 from fastapi.templating import Jinja2Templates
-templates = Jinja2Templates(directory="../www/templates")
+root = sdk.get_app_root()
+templates = Jinja2Templates(directory=root+"/app/www/templates")
 templates.env.globals['CustomURLProcessor'] = CustomURLProcessor
-app_fastapi.mount("/static", StaticFiles(directory="../www/static"), name="static")
-app_fastapi.mount("/images", StaticFiles(directory="../www/static/images"), name="images")
+app_fastapi.mount("/static", StaticFiles(directory=root+"/app/www/static"), name="static")
+app_fastapi.mount("/images", StaticFiles(directory=root+"/app/www/static/images"), name="images")
 @app_fastapi.get("/items/{id}", response_class=HTMLResponse)
 async def read_item(request: Request, id: str):
     return templates.TemplateResponse("item2.html", {"request": request, "id": id})
