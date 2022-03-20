@@ -14,6 +14,7 @@ import config
 from DroneSdk import models
 from fastapi import FastAPI
 
+from app import util
 from app.util import platform, grep_log
 from config import settings
 
@@ -84,7 +85,7 @@ async def get_log(logname:LogType, last_lines=250, grep='', exclude='_message(',
     return grep_log(logfile_abs, grep, exclude, int(last_lines))
 
 @app_fastapi.get("/restart", summary="Restart app on mobile device")
-async def restart():
+def restart():
     current_sdk.restart_app()
     return "Restarting"
 
@@ -184,7 +185,10 @@ def get_app_root() -> str:
 
 @app_fastapi.get("/get_git_root")
 def get_git_root() -> str:
-    return current_sdk.get_app_root()+'/git/mavicmax2'
+    if util.platform.is_running_on_android():
+        return current_sdk.get_app_root()+'/git/mavicmax2'
+    return current_sdk.get_app_root()
+
 
 
 '''

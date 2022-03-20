@@ -74,7 +74,7 @@ class _SimBindings(Bindings):
         return a
 
     def get_log_dir(self):
-        return get_simulated_app_root() + '/logs/20220101_0101'
+        return get_simulated_app_root() + '/simulated_app_root_logs_userdata/logs/20220101_0101'
 
     def update_url_touch(self, url:str):
         return self.android_activity.pythonToAndroid.update_url_touch(url)

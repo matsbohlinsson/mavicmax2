@@ -664,7 +664,6 @@ class View:
     def create_field(self, field_map, field_name, fields_container, value,on_change_callback=None, meta_type=None):
         log.info(f'{field_name=}')
         if field_name in field_map: return # Already exist, dont create another one
-        print(f"TTTT {field_name} {value=}")
         w = Field(text=field_name, value=value, type_=type(value),on_change_callback=on_change_callback, meta_type=meta_type)
         widget = w.get_gui_widget()
         fields_container.append(widget)
