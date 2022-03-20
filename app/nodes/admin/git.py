@@ -41,7 +41,6 @@ class Git(Node):
         self.input.autopull = autopull
         self.output.dir = sdk.get_app_root()+'/git/mavicmax2'
         self.input.select = {'a':'=a', 'b':'=b'}
-        sdk.restart()
 
 
     def pull(self):
