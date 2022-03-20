@@ -31,7 +31,7 @@ class Output:
 class Git(Node):
     input: Input
     output: Output
-    def __init__(self, autopull: bool=True, *args, **kwargs) -> None:
+    def __init__(self, autopull: bool=False, *args, **kwargs) -> None:
         input, output = Input(), Output()
         super().__init__(input=input, output=output, *args, **kwargs)
         self.input.restart.register(lambda : sdk.restart())
