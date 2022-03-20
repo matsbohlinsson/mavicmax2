@@ -215,7 +215,7 @@ def git_pull(self, dir, branchName):
     return current_sdk.git_pull(dir, branchName)
 
 @app_fastapi.get("/git_status")
-def git_status(self, dir):
+def git_status(dir):
     return current_sdk.git_status(dir)
 
 
