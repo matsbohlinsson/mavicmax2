@@ -182,6 +182,10 @@ async def stream_logs(request: Request):
 def get_app_root() -> str:
     return current_sdk.get_app_root()
 
+@app_fastapi.get("/get_git_root")
+def get_git_root() -> str:
+    return current_sdk.get_app_root()+'/git/mavicmax2'
+
 
 '''
 @app_fastapi.post("/test")

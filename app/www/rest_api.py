@@ -24,7 +24,7 @@ class CustomURLProcessor:
 
 
 from fastapi.templating import Jinja2Templates
-root = sdk.get_app_root()
+root = sdk.get_git_root()
 templates = Jinja2Templates(directory=root+"/app/www/templates")
 templates.env.globals['CustomURLProcessor'] = CustomURLProcessor
 app_fastapi.mount("/static", StaticFiles(directory=root+"/app/www/static"), name="static")
