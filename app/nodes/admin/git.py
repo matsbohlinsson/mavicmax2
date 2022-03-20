@@ -44,12 +44,11 @@ class Git(Node):
 
     def pull(self):
         try:
-            branch = sdk.get_git_branch(self.output.dir)
-            #self.output.message_screen = sdk.git(self.output.dir, branch)
+            self.output.message_screen = sdk.git_pull(self.output.dir)
             if "Already-up-to-date" not in self.output.message_screen:
                 pass
                 #sdk.restart()
-            self.output.branch = branch.split('/')[-1]
+            #self.output.branch = branch.split('/')[-1]
         except:
             self.output.branch = "Error1"
             print(f"ERROR{traceback.format_exc()}")
