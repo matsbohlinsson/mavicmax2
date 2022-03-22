@@ -4,13 +4,11 @@ import os
 import time
 import typing
 from dataclasses import dataclass
-from enum import Enum
 from typing import Dict, Callable
 import remi
 from remi import GenericDialog
 from remi.gui import Container, Button, Label, HBox, decorate_set_on_listener, decorate_event, Widget
 
-import MavicMaxGui
 import NodeCore
 
 log = logging.getLogger(__name__)

@@ -20,7 +20,6 @@ class Input:
     restart: Event = field(default_factory=Event)
     pull: Event = field(default_factory=Event)
     status: Event = field(default_factory=Event)
-    select: str = ""
     autopull: bool = False
 @dataclass
 class Output:
@@ -39,7 +38,6 @@ class Git(Node):
         self.input.status.register(lambda : self.status())
         self.input.autopull = autopull
         self.output.dir = sdk.get_app_root()+'/git/mavicmax2'
-        self.input.select = {'a':'=a', 'b':'=b'}
 
 
 
