@@ -137,7 +137,7 @@ def get_fpv_frame(quality:int=20):
 
 
 @app_fastapi.get('/stream-fpv')
-async def stream_fpv(request: Request, jpeg_compression=10, delay: float=0.1):
+async def stream_fpv(request: Request, jpeg_compression=100, delay: float=0.1):
     def generate():
         while True:
             filename = 'stream.jpg'
