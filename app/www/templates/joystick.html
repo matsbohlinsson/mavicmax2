@@ -16,6 +16,9 @@
 <body>
 
 Joystick Controls.
+<input type = "button" onclick = "functionName()" value = "Simulator">
+<input type = "button" onclick = "functionName()" value = "TakeOff">
+<button type="submit" onclick="location.href = '<?=base_url().'start_simulator?>';">Send Post Request</button>
 <hr>
 
 <div class="container">
@@ -41,6 +44,8 @@ Joystick Controls.
 	<img src="images/joystick-blue.png"/>
 	</div>
 </div>
+
+
 
 <script>
 
@@ -158,8 +163,8 @@ let joystick2 = new JoystickController("stick2", 64, 8);
 
 function update()
 {
-	//document.getElementById("status1").innerText = "Joystick 1: " + JSON.stringify(joystick1.value);
-	//document.getElementById("status2").innerText = "Joystick 2: " + JSON.stringify(joystick2.value);
+	document.getElementById("status1").innerText = "Joystick 1: " + JSON.stringify(joystick1.value);
+	document.getElementById("status2").innerText = "Joystick 2: " + JSON.stringify(joystick2.value);
 	//<input type = "button" onclick = "functionName()" value = "Click Me">
 }
 

@@ -32,6 +32,7 @@ def start_simulator(lat:float = 58.12345, lon: float=11.987654):
     - **lat**: Homepoint latitude
     - **lon**: Homepoint longitude
     """
+    print("STARTSIM")
     current_sdk.start_simulator(lat, lon)
     return "OK"
 
