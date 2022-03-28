@@ -91,6 +91,37 @@ class GpsTracker(Node):
         o.barometer_altitude = float(parameters.pop(0))
         return o
 
+    def _start_simulate_tracker_from_file(self, filename):
+        line_nbr=-1
+        with open(filename) as fp:
+            line = fp.readline()
+
+            starttime = time.time()
+            while line:
+                line = fp.readline()
+                line_nbr += 1
+                if line_nbr % 10 != 0:
+                    continue
+                #log.info("LINE", line)
+                columns = line.split(',')
+                columns.pop(0) # Remove packet number
+                line = ','.join(columns)
+                # log.info("LINE", line)
+                cls.sock_send = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+                cls.sock_send.settimeout(cls.TIMEOUT)
+                sock_send.sendto(msg, (ip_address, cls.port))
+                time.sleep(1.0 - ((time.time() - starttime) % 1.0))
+    @classmethod
+    def _send(cls, ip_address, message):
+        cls.latest_sent_packet_nbr = cls.latest_sent_packet_nbr + 1
+        msg_sent = str(cls.latest_sent_packet_nbr) + ',' + message
+        msg = str.encode(str(cls.latest_sent_packet_nbr) + ',' + message)
+        cls.timestamp_latest_send = time.time_ns()
+        # log.info("send.sendto " + msg_sent + " ip:" + ip_address)
+        UdpCommunicator.sock_send.sendto(msg, (ip_address, cls.port))
+        return int(cls.latest_rtt)
+
+
 
 if __name__ == "__main__":
     #NodeCore.run_from_main(__file__)
