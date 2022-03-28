@@ -27,6 +27,7 @@ class Output:
     gps_altitude:float = -1111
     barometer_altitude:float = -1111
     rtt: float = -1111
+    packet_nbr:int = -1111
     connected: bool = False
     timestamp: bool = False
     tracker_ip4:str=""
@@ -58,7 +59,7 @@ class GpsTracker(Node):
         self.log.info(f"UDP server started on port: {str(self.port)}")
         while True:
             data, address = sock.recvfrom(1024)
-            self.parse_message(data.decode())
+            self._next_output = self.parse_message(data.decode())
 
             if data:
                 data = data.decode().split(',')[0] + "," + self.input.tts
@@ -72,10 +73,12 @@ class GpsTracker(Node):
         ip6s = [x[4][0] for x in socket.getaddrinfo(socket.gethostname(), port=None, family=socket.AddressFamily.AF_INET6)]
         return ip6s
 
-    def parse_message(self, data):
+    def parse_message(self, data) -> Output:
         o = deepcopy(self.output)
         parameters = data.split(',')
-        packet_nbr = parameters.pop(0)
+        o.packet_nbr = parameters.pop(0)
+        if o.packet_nbr <= self.output.packet_nbr or o.packet_nbr <= self._next_output.packet_nbr:
+            return self.output
         o.lat = float(parameters.pop(0))
         o.lon = float(parameters.pop(0))
         o.speed = float(parameters.pop(0))
@@ -86,7 +89,7 @@ class GpsTracker(Node):
         o.timestamp = int(parameters.pop(0))
         o.rtt = int(parameters.pop(0))
         o.barometer_altitude = float(parameters.pop(0))
-        self._next_output = o
+        return o
 
 
 if __name__ == "__main__":
