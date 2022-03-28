@@ -19,6 +19,11 @@ Joystick Controls.
 <input type = "button" onclick = "functionName()" value = "Simulator">
 <input type = "button" onclick = "functionName()" value = "TakeOff">
 <button type="submit" onclick="location.href = '<?=base_url().'start_simulator?>';">Send Post Request</button>
+
+<form method='POST' action='start_simulator'>
+  <button type='submit'>Submit</button>
+</form>
+
 <hr>
 
 <div class="container">
@@ -48,6 +53,8 @@ Joystick Controls.
 
 
 <script>
+
+
 
 class JoystickController
 {
