@@ -4,6 +4,8 @@ import socket
 import time
 from copy import deepcopy
 from dataclasses import dataclass, field
+from pathlib import Path
+
 import NodeCore
 from NodeCore import Node, Event, plugin_name
 import DroneSdk.sdk as sdk
@@ -18,11 +20,11 @@ class Input:
 
 @dataclass
 class Output:
-    lat:float=-11111
-    lon:float=-11111
-    acc:float=-11111
-    speed:float = -1111
-    heading:float = -1111
+    lat:float=-11111.0
+    lon:float=-11111.0
+    acc:float=-11111.0
+    speed:float = -1111.0
+    heading:float = -1111.0
     course_acc: float = -1111
     gps_altitude:float = -1111
     barometer_altitude:float = -1111
@@ -43,11 +45,13 @@ class GpsTracker(Node):
     def __init__(self, port:int, *args, **kwargs) -> None:
         input, output = Input(), Output()
         super().__init__(input=input, output=output, *args, **kwargs)
-        self.port=port
+        self.port=int(port)
         self.server_thread = _thread.start_new_thread(self.receiver,())
         output.local_ip4s = self.get_local_ip4()
         output.local_ip6s = self.get_local_ip6()
-
+        self._next_output = self.output
+        _thread.start_new_thread(self._start_simulate_tracker_from_file,
+                                 (Path(sdk.get_app_root()+'/app/nodes/csv_testdata/tracklogs/gps_20201017_1334.csv').as_posix(),))
 
     def run(self) -> None:
         self.output = self._next_output
@@ -59,9 +63,8 @@ class GpsTracker(Node):
         self.log.info(f"UDP server started on port: {str(self.port)}")
         while True:
             data, address = sock.recvfrom(1024)
-            self._next_output = self.parse_message(data.decode())
-
             if data:
+                self._next_output = self.parse_message(data.decode())
                 data = data.decode().split(',')[0] + "," + self.input.tts
                 sock.sendto(data.encode(), address)
 
@@ -76,7 +79,8 @@ class GpsTracker(Node):
     def parse_message(self, data) -> Output:
         o = deepcopy(self.output)
         parameters = data.split(',')
-        o.packet_nbr = parameters.pop(0)
+        o.packet_nbr = int(parameters.pop(0))
+        o.connected = True
         if o.packet_nbr <= self.output.packet_nbr or o.packet_nbr <= self._next_output.packet_nbr:
             return self.output
         o.lat = float(parameters.pop(0))
@@ -89,6 +93,7 @@ class GpsTracker(Node):
         o.timestamp = int(parameters.pop(0))
         o.rtt = int(parameters.pop(0))
         o.barometer_altitude = float(parameters.pop(0))
+        print(f'{o.lat=} {o.lon=}')
         return o
 
     def _start_simulate_tracker_from_file(self, filename):
@@ -102,29 +107,22 @@ class GpsTracker(Node):
                 line_nbr += 1
                 if line_nbr % 10 != 0:
                     continue
-                #log.info("LINE", line)
-                columns = line.split(',')
-                columns.pop(0) # Remove packet number
-                line = ','.join(columns)
-                # log.info("LINE", line)
-                cls.sock_send = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-                cls.sock_send.settimeout(cls.TIMEOUT)
-                sock_send.sendto(msg, (ip_address, cls.port))
+                sock_send = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+                sock_send.settimeout(2)
+                msg = str.encode(line)
+                sock_send.sendto(msg, ('127.0.0.1', self.port))
                 time.sleep(1.0 - ((time.time() - starttime) % 1.0))
-    @classmethod
-    def _send(cls, ip_address, message):
-        cls.latest_sent_packet_nbr = cls.latest_sent_packet_nbr + 1
-        msg_sent = str(cls.latest_sent_packet_nbr) + ',' + message
-        msg = str.encode(str(cls.latest_sent_packet_nbr) + ',' + message)
-        cls.timestamp_latest_send = time.time_ns()
-        # log.info("send.sendto " + msg_sent + " ip:" + ip_address)
-        UdpCommunicator.sock_send.sendto(msg, (ip_address, cls.port))
-        return int(cls.latest_rtt)
+
+
 
 
 
 if __name__ == "__main__":
     #NodeCore.run_from_main(__file__)
     node = create_node()
+    #_thread.start_new_thread(node._start_simulate_tracker_from_file, ( Path('../csv_testdata/tracklogs/gps_20201017_1334.csv').as_posix(),) )
+    print(sdk.get_app_root())
     print(node.output.local_ip4s)
+    time.sleep(10)
+
 
