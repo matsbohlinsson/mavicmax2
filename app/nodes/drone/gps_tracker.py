@@ -12,7 +12,7 @@ import DroneSdk.sdk as sdk
 log = logging.getLogger(__file__)
 
 def create_node(plugin_name=plugin_name(__file__), parent=None, port:int=5005):
-    return GpsTracker(plugin_name=plugin_name, parent=parent, port=port)
+    return GpsTracker(plugin_name=plugin_name, parent=parent, port=int(port))
 
 @dataclass
 class Input:
@@ -45,7 +45,7 @@ class GpsTracker(Node):
     def __init__(self, port:int, *args, **kwargs) -> None:
         input, output = Input(), Output()
         super().__init__(input=input, output=output, *args, **kwargs)
-        self.port=int(port)
+        self.port=port
         self.server_thread = _thread.start_new_thread(self.receiver,())
         output.local_ip4s = self.get_local_ip4()
         output.local_ip6s = self.get_local_ip6()
